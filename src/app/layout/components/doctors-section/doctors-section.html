@@ -1,0 +1,65 @@
+
+<section class="our-doctors-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 aos" data-aos="fade-up">
+                <div class="section-heading">
+                    <h2>Book Our Best Doctor</h2>
+                    <p>Meet our experts & book online</p>
+                </div>
+            </div>
+            <div class="col-md-6 text-end aos" data-aos="fade-up">
+                <div class="owl-nav slide-nav-2 text-end nav-control"></div>
+            </div>
+        </div>
+        <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+
+        <div *ngIf="!loading && !error" class="owl-carousel our-doctors owl-theme aos" data-aos="fade-up">
+            <div class="item" *ngFor="let doctor of doctors">
+                <div class="our-doctors-card">
+                    <div class="doctors-header">
+                        <a href="#"><img src="assets/img/doctors/doctor-01.jpg" [alt]="doctor.fullName" class="img-fluid"></a>
+                        <div class="img-overlay">
+                            <span>{{ formatPrice(doctor.consultationFee) }}</span>
+                        </div>
+                    </div>
+                    <div class="doctors-body">
+                        <div class="rating">
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="d-inline-block average-ratings">4.0</span>
+                        </div>
+                        <a href="doctor-profile.html">
+                            <h4>{{ doctor.fullName }}</h4>
+                        </a>
+                        <p>{{ doctor.qualification }} - {{ doctor.specialtyName }}</p>
+                        <div class="location d-flex">
+                            <p><i class="isax isax-user"></i>{{ getGenderDisplay(doctor.gender) }}</p>
+                            <p class="ms-auto"><i class="isax isax-calendar"></i>{{ doctor.yearsOfExperience }} năm kinh nghiệm</p>
+                        </div>
+                        <div class="row row-sm">
+                            <div class="col-6">
+                                <a href="doctor-profile.html" class="btn btn-dark w-100" tabindex="0">Xem chi tiết</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="booking.html" class="btn btn-primary w-100" tabindex="0">Đặt lịch</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Best Doctor Section -->

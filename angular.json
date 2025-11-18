@@ -16,13 +16,20 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/bootstrap.min.css",
+              "src/assets/plugins/fontawesome/css/fontawesome.min.css",
+              "src/assets/plugins/fontawesome/css/all.min.css",
+              "src/assets/css/feather.css",
+              "src/assets/css/iconsax.css",
+              "src/assets/css/animate.css",
+              "src/assets/css/owl.carousel.min.css",
+              "src/assets/plugins/select2/css/select2.min.css",
+              "src/assets/css/aos.css",
+              "src/assets/css/custom.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
@@ -74,17 +81,27 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/css/bootstrap.min.css",
+              "src/assets/plugins/fontawesome/css/fontawesome.min.css",
+              "src/assets/plugins/fontawesome/css/all.min.css",
+              "src/assets/css/feather.css",
+              "src/assets/css/iconsax.css",
+              "src/assets/css/animate.css",
+              "src/assets/css/owl.carousel.min.css",
+              "src/assets/plugins/select2/css/select2.min.css",
+              "src/assets/css/aos.css",
+              "src/assets/css/custom.css"
             ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

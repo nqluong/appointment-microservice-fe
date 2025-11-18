@@ -1,9 +1,17 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AuthLayout } from './layout/auth-layout/auth-layout';
+import { MainLayout } from './layout/main-layout/main-layout';
+import { AdminLayout } from './layout/admin-layout/admin-layout';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterOutlet
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
