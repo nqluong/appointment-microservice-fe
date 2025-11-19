@@ -1,0 +1,213 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <div class="row align-items-center inner-banner">
+            <div class="col-md-12 col-12 text-center">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="isax isax-home-15"></i></a></li>
+                        <li class="breadcrumb-item active">Đặt lịch khám</li>
+                    </ol>
+                    <h2 class="breadcrumb-title">Đặt lịch khám</h2>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="breadcrumb-bg">
+        <img src="assets/img/bg/breadcrumb-bg-01.png" alt="img" class="breadcrumb-bg-01">
+        <img src="assets/img/bg/breadcrumb-bg-02.png" alt="img" class="breadcrumb-bg-02">
+        <img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-03">
+        <img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-04">
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Content -->
+<div class="content doctor-content">
+    <div class="container">
+
+        <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Đang tải...</span>
+            </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+
+        <div *ngIf="doctor && !loading" class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="booking-doc-info">
+                            <a [routerLink]="['/doctor-profile', doctor.userId]" class="booking-doc-img">
+                                <img [src]="doctor.avatarUrl || 'assets/img/doctors/doctor-thumb-02.jpg'"
+                                    [alt]="doctor.fullName">
+                            </a>
+                            <div class="booking-info">
+                                <h4><a [routerLink]="['/doctor-profile', doctor.userId]">{{ doctor.fullName }}</a></h4>
+                                <p class="doc-speciality">{{ doctor.qualification }} - {{ doctor.specialtyName }}</p>
+                                <p class="text-muted mb-2"><i class="feather-phone"></i> {{ doctor.phone }}</p>
+                                <p class="text-muted mb-0"><i class="feather-dollar-sign"></i> {{
+                                    formatPrice(doctor.consultationFee) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body booking-body">
+                    <div class="card mb-0">
+                        <div class="card-body pb-1">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="card">
+                                        <div class="card-body p-4">
+                                            <div class="custom-calendar">
+                                                <!-- Calendar Header -->
+                                                <div class="calendar-header">
+                                                    <button class="calendar-nav-btn" 
+                                                            [disabled]="!canGoPreviousMonth()"
+                                                            (click)="previousMonth()">
+                                                        <i class="fas fa-chevron-left"></i>
+                                                    </button>
+                                                    <h5 class="calendar-title">{{ currentMonthYear }}</h5>
+                                                    <button class="calendar-nav-btn"
+                                                            [disabled]="!canGoNextMonth()"
+                                                            (click)="nextMonth()">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </button>
+                                                </div>
+
+                                                <!-- Calendar Grid -->
+                                                <div class="calendar-grid">
+                                                    <!-- Day headers -->
+                                                    <div class="calendar-day-header">Su</div>
+                                                    <div class="calendar-day-header">Mo</div>
+                                                    <div class="calendar-day-header">Tu</div>
+                                                    <div class="calendar-day-header">We</div>
+                                                    <div class="calendar-day-header">Th</div>
+                                                    <div class="calendar-day-header">Fr</div>
+                                                    <div class="calendar-day-header">Sa</div>
+
+                                                    <!-- Calendar days -->
+                                                    <div *ngFor="let day of calendarDays"
+                                                         class="calendar-day"
+                                                         [class.other-month]="!day.isCurrentMonth"
+                                                         [class.today]="day.isToday"
+                                                         [class.selected]="day.isSelected"
+                                                         [class.has-slots]="day.hasSlots && day.isCurrentMonth"
+                                                         [class.disabled]="!day.hasSlots || !day.isCurrentMonth"
+                                                         (click)="selectDate(day)">
+                                                        <span class="day-number">{{ day.date }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="card booking-wizard-slots">
+                                        <div class="card-body">
+                                            
+                                            <!-- No date selected message -->
+                                            <div *ngIf="!selectedDate" class="text-center text-muted py-4">
+                                                <i class="feather-calendar" style="font-size: 48px;"></i>
+                                                <p class="mt-3">Vui lòng chọn ngày để xem khung giờ có sẵn</p>
+                                            </div>
+
+                                            <!-- Time slots when date is selected -->
+                                            <ng-container *ngIf="selectedDate">
+                                                <!-- Morning slots -->
+                                                <ng-container *ngIf="getSlotsByTimeOfDay('morning').length > 0">
+                                                    <div class="book-title">
+                                                        <h6 class="fs-14 mb-2">Buổi sáng</h6>
+                                                    </div>
+                                                    <div class="token-slot mt-2 mb-3">
+                                                        <div *ngFor="let slot of getSlotsByTimeOfDay('morning')" 
+                                                            class="form-check-inline visits me-0">
+                                                            <label class="visit-btns">
+                                                                <input type="radio" 
+                                                                    class="form-check-input"
+                                                                    name="selectedSlot"
+                                                                    [checked]="isSlotSelected(slot)"
+                                                                    (change)="selectSlot(slot)">
+                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+
+                                                <!-- Afternoon slots -->
+                                                <ng-container *ngIf="getSlotsByTimeOfDay('afternoon').length > 0">
+                                                    <div class="book-title">
+                                                        <h6 class="fs-14 mb-2">Buổi chiều</h6>
+                                                    </div>
+                                                    <div class="token-slot mt-2 mb-3">
+                                                        <div *ngFor="let slot of getSlotsByTimeOfDay('afternoon')" 
+                                                            class="form-check-inline visits me-0">
+                                                            <label class="visit-btns">
+                                                                <input type="radio" 
+                                                                    class="form-check-input"
+                                                                    name="selectedSlot"
+                                                                    [checked]="isSlotSelected(slot)"
+                                                                    (change)="selectSlot(slot)">
+                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+
+                                                <!-- Evening slots -->
+                                                <ng-container *ngIf="getSlotsByTimeOfDay('evening').length > 0">
+                                                    <div class="book-title">
+                                                        <h6 class="fs-14 mb-2">Buổi tối</h6>
+                                                    </div>
+                                                    <div class="token-slot mt-2 mb-3">
+                                                        <div *ngFor="let slot of getSlotsByTimeOfDay('evening')" 
+                                                            class="form-check-inline visits me-0">
+                                                            <label class="visit-btns">
+                                                                <input type="radio" 
+                                                                    class="form-check-input"
+                                                                    name="selectedSlot"
+                                                                    [checked]="isSlotSelected(slot)"
+                                                                    (change)="selectSlot(slot)">
+                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+
+                                                <!-- No slots message -->
+                                                <div *ngIf="getSlotsByTimeOfDay('morning').length === 0 && 
+                                                            getSlotsByTimeOfDay('afternoon').length === 0 && 
+                                                            getSlotsByTimeOfDay('evening').length === 0"
+                                                    class="text-center text-muted py-4">
+                                                    <p>Không có khung giờ nào trong ngày này</p>
+                                                </div>
+                                            </ng-container>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="submit-section proceed-btn text-end mb-0">
+                    <button class="btn btn-primary submit-btn" [disabled]="!selectedSlot" (click)="proceedToCheckout()">
+                        Tiếp tục thanh toán
+                    </button>
+                </div>
+                <!-- /Submit Section -->
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /Page Content -->
