@@ -127,13 +127,16 @@
                                                     <div class="token-slot mt-2 mb-3">
                                                         <div *ngFor="let slot of getSlotsByTimeOfDay('morning')" 
                                                             class="form-check-inline visits me-0">
-                                                            <label class="visit-btns">
+                                                            <label class="visit-btns" [class.disabled]="!slot.isAvailable">
                                                                 <input type="radio" 
                                                                     class="form-check-input"
                                                                     name="selectedSlot"
+                                                                    [disabled]="!slot.isAvailable"
                                                                     [checked]="isSlotSelected(slot)"
                                                                     (change)="selectSlot(slot)">
-                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                                <span class="visit-rsn" [class.unavailable]="!slot.isAvailable">
+                                                                    {{ slot.startTime.substring(0, 5) }}
+                                                                </span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -147,13 +150,16 @@
                                                     <div class="token-slot mt-2 mb-3">
                                                         <div *ngFor="let slot of getSlotsByTimeOfDay('afternoon')" 
                                                             class="form-check-inline visits me-0">
-                                                            <label class="visit-btns">
+                                                            <label class="visit-btns" [class.disabled]="!slot.isAvailable">
                                                                 <input type="radio" 
                                                                     class="form-check-input"
                                                                     name="selectedSlot"
+                                                                    [disabled]="!slot.isAvailable"
                                                                     [checked]="isSlotSelected(slot)"
                                                                     (change)="selectSlot(slot)">
-                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                                <span class="visit-rsn" [class.unavailable]="!slot.isAvailable">
+                                                                    {{ slot.startTime.substring(0, 5) }}
+                                                                </span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -167,13 +173,16 @@
                                                     <div class="token-slot mt-2 mb-3">
                                                         <div *ngFor="let slot of getSlotsByTimeOfDay('evening')" 
                                                             class="form-check-inline visits me-0">
-                                                            <label class="visit-btns">
+                                                            <label class="visit-btns" [class.disabled]="!slot.isAvailable">
                                                                 <input type="radio" 
                                                                     class="form-check-input"
                                                                     name="selectedSlot"
+                                                                    [disabled]="!slot.isAvailable"
                                                                     [checked]="isSlotSelected(slot)"
                                                                     (change)="selectSlot(slot)">
-                                                                <span class="visit-rsn">{{ slot.startTime.substring(0, 5) }}</span>
+                                                                <span class="visit-rsn" [class.unavailable]="!slot.isAvailable">
+                                                                    {{ slot.startTime.substring(0, 5) }}
+                                                                </span>
                                                             </label>
                                                         </div>
                                                     </div>

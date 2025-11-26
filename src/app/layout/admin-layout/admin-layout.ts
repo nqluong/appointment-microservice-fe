@@ -24,24 +24,19 @@ export class AdminLayout implements OnInit , OnDestroy{
   ) {}
 
   ngOnInit(): void {
-    // Xóa CSS của giao diện người dùng bình thường (nếu cần)
     this.removeUserStyles();
     
-    // Tải CSS admin
     this.loadAdminStyles();
     
-    // Tải JS admin
     this.loadAdminScripts();
   }
 
   ngOnDestroy(): void {
-    // Xóa tất cả CSS và JS admin khi rời khỏi admin layout
     this.removeAdminAssets();
   }
 
   private removeUserStyles(): void {
-    // Tùy chọn: Xóa hoặc disable các CSS của user layout nếu cần
-    // Ví dụ: tạm thời disable
+
     const userStyles = this.document.querySelectorAll('link[href*="assets/css"]');
     userStyles.forEach((style) => {
       if (!style.getAttribute('href')?.includes('admin')) {

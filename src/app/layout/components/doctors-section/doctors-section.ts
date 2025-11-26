@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Doctor } from '../../../core/models/doctor.model';
@@ -8,7 +9,7 @@ import { DoctorService } from '../../../core/services/doctor.service';
 @Component({
   selector: 'app-doctors-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './doctors-section.html',
   styleUrl: './doctors-section.css'
 })
@@ -43,7 +44,6 @@ export class DoctorsSection implements OnInit, OnDestroy {
         next: (response) => {
           this.doctors = response.content;
           this.loading = false;
-          console.log('Loaded doctors:', this.doctors.length, this.doctors);
           this.cdr.markForCheck();
         },
         error: (err) => {

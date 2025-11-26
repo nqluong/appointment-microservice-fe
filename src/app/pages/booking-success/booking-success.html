@@ -1,0 +1,96 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <div class="row align-items-center inner-banner">
+            <div class="col-md-12 col-12 text-center">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/"><i class="isax isax-home-15"></i></a></li>
+                        <li class="breadcrumb-item active">Đặt lịch thành công</li>
+                    </ol>
+                    <h2 class="breadcrumb-title">Đặt lịch thành công</h2>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="breadcrumb-bg">
+        <img src="assets/img/bg/breadcrumb-bg-01.png" alt="img" class="breadcrumb-bg-01">
+        <img src="assets/img/bg/breadcrumb-bg-02.png" alt="img" class="breadcrumb-bg-02">
+        <img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-03">
+        <img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-04">
+    </div>
+</div>
+<!-- /Breadcrumb -->
+
+<!-- Page Content -->
+<div class="content success-page-cont">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                
+                <!-- Loading State -->
+                <div *ngIf="loading" class="card success-card">
+                    <div class="card-body">
+                        <div class="success-cont">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Đang xử lý...</span>
+                            </div>
+                            <p class="mt-3">Đang xử lý thanh toán...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Card -->
+                <div *ngIf="!loading && isSuccess" class="card success-card">
+                    <div class="card-body">
+                        <div class="success-cont">
+                            <i class="fas fa-check"></i>
+                            <h3>Thanh toán cho lịch hẹn thành công!</h3>
+                            <p *ngIf="doctorName && appointmentDate && appointmentTime">
+                                Lịch hẹn với <strong>{{ doctorName }}</strong><br>
+                                vào <strong>{{ formatDate(appointmentDate) }} lúc {{ appointmentTime }}</strong>
+                            </p>
+                            <p *ngIf="!doctorName || !appointmentDate || !appointmentTime">
+                                Lịch hẹn của bạn đã được đặt thành công!<br>
+                                Vui lòng kiểm tra email để xem chi tiết.
+                            </p>
+                            <div class="success-actions">
+                                <button *ngIf="appointmentId" class="btn btn-primary me-2" (click)="viewInvoice()">
+                                    Xem chi tiết
+                                </button>
+                                <button class="btn btn-outline-primary" (click)="goToHome()">
+                                    Về trang chủ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Card -->
+                <div *ngIf="!loading && !isSuccess" class="card error-card">
+                    <div class="card-body">
+                        <div class="error-cont">
+                            <i class="fas fa-times-circle"></i>
+                            <h3>Thanh toán thất bại!</h3>
+                            <p class="error-message">{{ errorMessage }}</p>
+                            <p class="text-muted">
+                                Đơn đặt lịch của bạn chưa được xác nhận.<br>
+                                Vui lòng thử lại hoặc liên hệ hỗ trợ nếu cần.
+                            </p>
+                            <div class="error-actions">
+                                <button class="btn btn-primary me-2" (click)="retryBooking()">
+                                    Đặt lịch lại
+                                </button>
+                                <button class="btn btn-outline-secondary" (click)="goToHome()">
+                                    Về trang chủ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Content -->

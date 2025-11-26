@@ -50,10 +50,10 @@
                         </div>
                         <div class="row row-sm">
                             <div class="col-6">
-                                <a href="doctor-profile.html" class="btn btn-dark w-100" tabindex="0">Xem chi tiết</a>
+                                <a [routerLink]="['/doctor-profile', doctor.userId]" class="btn btn-dark w-100" tabindex="0">Xem chi tiết</a>
                             </div>
                             <div class="col-6">
-                                <a href="booking.html" class="btn btn-primary w-100" tabindex="0">Đặt lịch</a>
+                                <a [routerLink]="['/booking']" [queryParams]="{doctorId: doctor.userId}" class="btn btn-primary w-100" tabindex="0">Đặt lịch</a>
                             </div>
                         </div>
                     </div>

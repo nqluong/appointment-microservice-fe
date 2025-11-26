@@ -158,3 +158,19 @@
 .visit-btns:hover .visit-rsn {
   border-color: #0d6efd;
 }
+
+.visit-btns.disabled {
+  cursor: not-allowed;
+}
+
+.visit-btns .visit-rsn.unavailable {
+  background: #e9ecef;
+  color: #adb5bd;
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: #dee2e6;
+}
+
+.visit-btns.disabled:hover .visit-rsn {
+  border-color: #dee2e6;
+}

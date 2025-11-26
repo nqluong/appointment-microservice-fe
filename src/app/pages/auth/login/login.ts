@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, NgZone, OnInit, ApplicationRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AuthService } from '../../../core/auth/auth.service';
@@ -22,6 +22,7 @@ export class Login implements OnInit {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  private returnUrl: string = '/';
 
   private destroy$ = new Subject<void>();
 
@@ -29,19 +30,14 @@ export class Login implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private appRef: ApplicationRef
   ) {}
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.initForm();
-
-        
-    // Redirect nếu đã login
-    // if (this.authService.isAuthenticated()) {
-    //   this.router.navigate(['/']);
-    // }
-
   }
 
    ngOnDestroy(): void {
@@ -94,9 +90,9 @@ export class Login implements OnInit {
     this.successMessage = message || 'Đăng nhập thành công!';
     this.cdr.markForCheck();
 
-    // Redirect và load lại trang sau 1s
+    // Redirect về returnUrl hoặc trang chủ sau 1s
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = this.returnUrl;
     }, 1000);
   }
 

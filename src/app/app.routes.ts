@@ -7,12 +7,43 @@ import { Dashbroad } from './pages/admin/dashbroad/dashbroad';
 import { provideRouter } from '@angular/router';
 import { authGuard, guestGuard } from './core/auth/auth.guard';
 import { Register } from './pages/auth/register/register';
+import { DoctorProfile } from './pages/doctor-profile/doctor-profile';
+import { Home } from './pages/home/home';
+import { Booking } from './pages/booking/booking';
+import { Checkout } from './pages/checkout/checkout';
+import { BookingSuccess } from './pages/booking-success/booking-success';
+import { InvoiceView } from './pages/invoice-view/invoice-view';
 
 export const routes: Routes = [
   {
     path: '',
-    component: MainLayout
-    // loadComponent: () => import('./layout/main-layout/main-layout').then(m => m.MainLayout)
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        component: Home
+      },
+      {
+        path: 'doctor-profile/:id',
+        component: DoctorProfile
+      },
+      {
+        path: 'booking',
+        component: Booking
+      },
+      {
+        path: 'checkout',
+        component: Checkout
+      },
+      {
+        path: 'booking-success',
+        component: BookingSuccess
+      },
+      {
+        path: 'invoice/:id',
+        component: InvoiceView
+      }
+    ]
   },
   {
     path: 'auth',

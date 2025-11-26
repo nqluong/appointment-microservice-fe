@@ -91,11 +91,9 @@ export class Checkout implements OnInit, OnDestroy {
   }
 
   private loadUserProfile(): void {
-    // Get userId from auth service
     const userInfo = this.authService.getUserInfo();
     
     if (!userInfo || !userInfo.userId) {
-      // User not logged in, skip loading profile
       return;
     }
 
@@ -104,7 +102,6 @@ export class Checkout implements OnInit, OnDestroy {
       .subscribe({
         next: (profile) => {
           this.userProfile = profile;
-          // Auto-fill form with user data
           this.firstName = profile.firstName;
           this.lastName = profile.lastName;
           this.phone = profile.phone;
@@ -164,29 +161,20 @@ export class Checkout implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          // Log full response as JSON string to avoid truncation
-          console.log('Full response JSON:', JSON.stringify(response, null, 2));
-          console.log('Payment URL length:', response.paymentUrl?.length);
           
-          // Redirect to VNPay payment URL
           if (response.paymentUrl) {
+            // Save appointment info to localStorage before redirect
+            const appointmentInfo = {
+              appointmentId: response.appointmentId,
+              doctorName: response.doctorName,
+              appointmentDate: response.appointmentDate,
+              appointmentTime: `${this.formatTime(response.startTime)} - ${this.formatTime(response.endTime)}`
+            };
+            localStorage.setItem('pendingAppointment', JSON.stringify(appointmentInfo));
+
             // Validate URL before redirect
             if (response.paymentUrl.startsWith('http://') || response.paymentUrl.startsWith('https://')) {
-              // Copy URL to clipboard for easy debugging
-              navigator.clipboard.writeText(response.paymentUrl).catch(() => {});
-              
-              // Show URL for debugging (REMOVE THIS AFTER TESTING)
-              const confirmRedirect = confirm(
-                'Payment URL ready (copied to clipboard).\n\n' +
-                'URL: ' + response.paymentUrl.substring(0, 100) + '...\n\n' +
-                'Click OK to proceed to VNPay.'
-              );
-              if (confirmRedirect) {
-                window.location.href = response.paymentUrl;
-              } else {
-                this.isSubmitting = false;
-                this.cdr.markForCheck();
-              }
+              window.location.href = response.paymentUrl;
             } else {
               console.error('Invalid payment URL:', response.paymentUrl);
               alert('URL thanh toán không hợp lệ');
@@ -195,7 +183,14 @@ export class Checkout implements OnInit, OnDestroy {
             }
           } else {
             alert('Đặt lịch thành công!');
-            this.router.navigate(['/']);
+            this.router.navigate(['/booking-success'], {
+              queryParams: {
+                appointmentId: response.appointmentId,
+                doctorName: response.doctorName,
+                date: response.appointmentDate,
+                time: `${this.formatTime(response.startTime)} - ${this.formatTime(response.endTime)}`
+              }
+            });
           }
         },
         error: (err) => {

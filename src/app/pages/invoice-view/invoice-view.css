@@ -1,0 +1,92 @@
+.invoice-card {
+  border: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.invoice-header {
+  padding: 20px 0;
+}
+
+.invoice-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.invoice-info {
+  padding: 20px 0;
+}
+
+.invoice-info h6 {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.invoice-info p {
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.badge {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.badge-info {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+.badge-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.badge-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.invoice-actions {
+  padding: 20px 0;
+}
+
+.invoice-actions .btn {
+  min-width: 120px;
+  padding: 10px 20px;
+}
+
+/* Print styles */
+@media print {
+  .breadcrumb-bar,
+  .invoice-actions,
+  .btn {
+    display: none !important;
+  }
+
+  .invoice-card {
+    box-shadow: none;
+    border: 1px solid #dee2e6;
+  }
+
+  body {
+    background: white;
+  }
+}

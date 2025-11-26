@@ -102,7 +102,15 @@ export class Booking implements OnInit, OnDestroy{
   private groupSlotsByDate(): void {
     if (!this.doctor?.availableSlots) return;
 
-    this.groupedSlots = this.doctor.availableSlots.reduce((acc, slot) => {
+    // Remove duplicates based on slotId before grouping
+    const uniqueSlots = this.doctor.availableSlots.filter((slot, index, self) =>
+      index === self.findIndex((s) => s.slotId === slot.slotId)
+    );
+
+    console.log('Original slots:', this.doctor.availableSlots.length);
+    console.log('Unique slots:', uniqueSlots.length);
+
+    this.groupedSlots = uniqueSlots.reduce((acc, slot) => {
       if (!acc[slot.slotDate]) {
         acc[slot.slotDate] = [];
       }
@@ -111,6 +119,13 @@ export class Booking implements OnInit, OnDestroy{
     }, {} as GroupedSlotsByDate);
 
     this.availableDates = Object.keys(this.groupedSlots).sort();
+  }
+
+  private formatDateToString(year: number, month: number, day: number): string {
+    const y = year;
+    const m = String(month + 1).padStart(2, '0');
+    const d = String(day).padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 
   private updateCalendar(): void {
@@ -138,7 +153,7 @@ export class Booking implements OnInit, OnDestroy{
     // Previous month days
     for (let i = startDay - 1; i >= 0; i--) {
       const date = daysInPrevMonth - i;
-      const fullDate = new Date(year, month - 1, date).toISOString().split('T')[0];
+      const fullDate = this.formatDateToString(year, month - 1, date);
       this.calendarDays.push({
         date,
         fullDate,
@@ -152,7 +167,7 @@ export class Booking implements OnInit, OnDestroy{
     // Current month days
     const daysInMonth = lastDay.getDate();
     for (let date = 1; date <= daysInMonth; date++) {
-      const fullDate = new Date(year, month, date).toISOString().split('T')[0];
+      const fullDate = this.formatDateToString(year, month, date);
       const dateObj = new Date(year, month, date);
       dateObj.setHours(0, 0, 0, 0);
       
@@ -169,7 +184,7 @@ export class Booking implements OnInit, OnDestroy{
     // Next month days to complete the grid (42 days = 6 weeks)
     const remainingDays = 42 - this.calendarDays.length;
     for (let date = 1; date <= remainingDays; date++) {
-      const fullDate = new Date(year, month + 1, date).toISOString().split('T')[0];
+      const fullDate = this.formatDateToString(year, month + 1, date);
       this.calendarDays.push({
         date,
         fullDate,
@@ -250,7 +265,7 @@ export class Booking implements OnInit, OnDestroy{
       } else { // evening
         return hour >= 18 && hour < 24;
       }
-    });
+    }).sort((a, b) => a.startTime.localeCompare(b.startTime));
   }
 
   getSlotsByDate(date: string): TimeSlot[] {
@@ -281,7 +296,8 @@ export class Booking implements OnInit, OnDestroy{
   }
 
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('vi-VN', { 
       day: '2-digit',
       month: 'short',
@@ -290,7 +306,8 @@ export class Booking implements OnInit, OnDestroy{
   }
 
   formatDateShort(dateString: string): string {
-    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('vi-VN', { 
       day: '2-digit',
       month: 'short'
@@ -298,14 +315,15 @@ export class Booking implements OnInit, OnDestroy{
   }
 
   getDayOfWeek(dateString: string): string {
-    const date = new Date(dateString);
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
     return days[date.getDay()];
   }
 
   getYear(dateString: string): string {
-    const date = new Date(dateString);
-    return date.getFullYear().toString();
+    const [year] = dateString.split('-').map(Number);
+    return year.toString();
   }
 
   formatTime(timeString: string): string {
