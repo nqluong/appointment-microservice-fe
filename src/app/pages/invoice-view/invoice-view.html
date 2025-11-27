@@ -26,17 +26,17 @@
 <div class="content">
     <div class="container">
         @if (loading) {
-            <div class="text-center py-5">
-                <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Đang tải...</span>
-                </div>
+        <div class="text-center py-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Đang tải...</span>
             </div>
+        </div>
         }
 
         @if(error){
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-            </div>
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
         }
         @if (appointment && !loading) {
         <div class="row">
