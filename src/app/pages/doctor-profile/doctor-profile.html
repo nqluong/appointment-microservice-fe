@@ -27,86 +27,101 @@
 <div class="content">
     <div class="container">
 
-        <div *ngIf="loading" class="text-center py-5">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Đang tải...</span>
+        @if (loading) {
+            <div class="text-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
             </div>
-        </div>
+        }
 
-        <div *ngIf="error" class="alert alert-danger" role="alert">
-            {{ error }}
-        </div>
+        @if(error){
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        }
 
-        <!-- Doctor Widget -->
-        <div *ngIf="doctor && !loading" class="card doc-profile-card">
-            <div class="card-body">
-                <div class="doctor-widget doctor-profile-two">
-                    <div class="doc-info-left">
-                        <div class="doctor-img">
-                            <img [src]="doctor.avatarUrl || 'assets/img/doctors/doc-profile-02.jpg'" class="img-fluid" [alt]="doctor.fullName">
+        @if(doctor && !loading){
+            <div class="card doc-profile-card">
+                <div class="card-body">
+                    <div class="doctor-widget doctor-profile-two">
+                        <div class="doc-info-left">
+                            <div class="doctor-img">
+                                <img [src]="doctor.avatarUrl || 'assets/img/doctors/doc-profile-02.jpg'" class="img-fluid"
+                                    [alt]="doctor.fullName">
+                            </div>
+                            <div class="doc-info-cont">
+                                <h4 class="doc-name">{{ doctor.fullName }} <img src="assets/img/icons/badge-check.svg"
+                                        alt="Img"><span class="badge doctor-role-badge"><i class="fa-solid fa-circle"></i>{{
+                                        doctor.specialtyName }}</span></h4>
+                                <p>{{ doctor.qualification }}</p>
+                                <p><i class="feather-phone"></i> {{ doctor.phone }}</p>
+                                <p *ngIf="doctor.email"><i class="feather-mail"></i> {{ doctor.email }}</p>
+                            </div>
                         </div>
-                        <div class="doc-info-cont">
-                            <h4 class="doc-name">{{ doctor.fullName }} <img src="assets/img/icons/badge-check.svg" alt="Img"><span class="badge doctor-role-badge"><i class="fa-solid fa-circle"></i>{{ doctor.specialtyName }}</span></h4>
-                            <p>{{ doctor.qualification }}</p>
-                            <p><i class="feather-phone"></i> {{ doctor.phone }}</p>
-                            <p *ngIf="doctor.email"><i class="feather-mail"></i> {{ doctor.email }}</p>
+                        <div class="doc-info-right">
+                            <ul class="doctors-activities">
+                                <li>
+                                    <div class="hospital-info">
+                                        <span class="list-icon"><img src="assets/img/icons/watch-icon.svg" alt="Img"></span>
+                                        <p>{{ getGenderDisplay(doctor.gender) }}</p>
+                                    </div>
+                                    <ul class="sub-links">
+                                        <li><a href="#"><i class="feather-heart"></i></a></li>
+                                        <li><a href="#"><i class="feather-share-2"></i></a></li>
+                                        <li><a href="#"><i class="feather-link"></i></a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <div class="hospital-info">
+                                        <span class="list-icon"><img src="assets/img/icons/bullseye.svg" alt="Img"></span>
+                                        <p>{{ doctor.yearsOfExperience }} năm kinh nghiệm</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <ul class="contact-doctors">
+                                        <li><a href="#"><span><img src="assets/img/icons/device-message2.svg"
+                                                        alt="Img"></span>Chat</a></li>
+                                        <li><a [href]="'tel:' + doctor.phone"><span class="bg-violet"><i
+                                                        class="feather-phone-forwarded"></i></span>Gọi thoại</a></li>
+                                        <li><a href="#"><span class="bg-indigo"><i class="fa-solid fa-video"></i></span>Gọi
+                                                video</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="doc-info-right">
-                        <ul class="doctors-activities">
+                    <div class="doc-profile-card-bottom">
+                        <ul>
                             <li>
-                                <div class="hospital-info">
-                                    <span class="list-icon"><img src="assets/img/icons/watch-icon.svg" alt="Img"></span>
-                                    <p>{{ getGenderDisplay(doctor.gender) }}</p>
-                                </div>
-                                <ul class="sub-links">
-                                    <li><a href="#"><i class="feather-heart"></i></a></li>
-                                    <li><a href="#"><i class="feather-share-2"></i></a></li>
-                                    <li><a href="#"><i class="feather-link"></i></a></li>
-                                </ul>
+                                <span class="bg-blue"><img src="assets/img/icons/calendar3.svg" alt="Img"></span>
+                                {{ doctor.availableSlots.length }} lịch trống
                             </li>
                             <li>
-                                <div class="hospital-info">
-                                    <span class="list-icon"><img src="assets/img/icons/bullseye.svg" alt="Img"></span>
-                                    <p>{{ doctor.yearsOfExperience }} năm kinh nghiệm</p>
-                                </div>
+                                <span class="bg-dark-blue"><img src="assets/img/icons/bullseye.svg" alt="Img"></span>
+                                Hành nghề {{ doctor.yearsOfExperience }} năm
                             </li>
                             <li>
-                                <ul class="contact-doctors">
-                                    <li><a href="#"><span><img src="assets/img/icons/device-message2.svg" alt="Img"></span>Chat</a></li>
-                                    <li><a [href]="'tel:' + doctor.phone"><span class="bg-violet"><i class="feather-phone-forwarded"></i></span>Gọi thoại</a></li>
-                                    <li><a href="#"><span class="bg-indigo"><i class="fa-solid fa-video"></i></span>Gọi video</a></li>
-                                </ul>
+                                <span class="bg-green"><img src="assets/img/icons/bookmark-star.svg" alt="Img"></span>
+                                {{ doctor.specialtyName }}
                             </li>
                         </ul>
-                    </div>
-                </div>
-                <div class="doc-profile-card-bottom">
-                    <ul>
-                        <li>
-                            <span class="bg-blue"><img src="assets/img/icons/calendar3.svg" alt="Img"></span>
-                            {{ doctor.availableSlots.length }} lịch trống
-                        </li>
-                        <li>
-                            <span class="bg-dark-blue"><img src="assets/img/icons/bullseye.svg" alt="Img"></span>
-                            Hành nghề {{ doctor.yearsOfExperience }} năm
-                        </li>
-                        <li>
-                            <span class="bg-green"><img src="assets/img/icons/bookmark-star.svg" alt="Img"></span>
-                            {{ doctor.specialtyName }}
-                        </li>
-                    </ul>
-                    <div class="bottom-book-btn">
-                        <p><span>Giá: {{ formatPrice(doctor.consultationFee) }}</span> cho một buổi khám</p>
-                        <div class="clinic-booking">
-                            <a class="apt-btn" [routerLink]="['/booking']" [queryParams]="{doctorId: doctor.userId}">Đặt lịch hẹn</a>
+                        <div class="bottom-book-btn">
+                            <p><span>Giá: {{ formatPrice(doctor.consultationFee) }}</span> cho một buổi khám</p>
+                            <div class="clinic-booking">
+                                <a class="apt-btn" [routerLink]="['/booking']" [queryParams]="{doctorId: doctor.userId}">Đặt
+                                    lịch hẹn</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+
+        <!-- Doctor Widget -->
+
         <!-- /Doctor Widget -->
-        
+
         <div class="doctors-detailed-info">
             <ul class="information-title-list">
                 <li class="active">
@@ -145,12 +160,15 @@
                     <div class="detail-title">
                         <h4>Tiểu sử bác sĩ</h4>
                     </div>
-                    <p>"Bác sĩ tận tâm và giàu kinh nghiệm với niềm đam mê cung cấp dịch vụ chăm sóc tuyệt vời cho bệnh nhân. 
-                        Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm sóc sức khỏe ban đầu và y học cấp cứu. 
-                        Thành thạo trong việc sử dụng công nghệ mới nhất để tối ưu hóa chăm sóc bệnh nhân. 
+                    <p>"Bác sĩ tận tâm và giàu kinh nghiệm với niềm đam mê cung cấp dịch vụ chăm sóc tuyệt vời cho bệnh
+                        nhân.
+                        Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm sóc sức
+                        khỏe ban đầu và y học cấp cứu.
+                        Thành thạo trong việc sử dụng công nghệ mới nhất để tối ưu hóa chăm sóc bệnh nhân.
                         Cam kết cung cấp dịch vụ chăm sóc chu đáo và cá nhân hóa cho từng bệnh nhân."
                     </p>
-                    <a href="#" class="show-more d-flex align-items-center">Xem thêm<i class="fa-solid fa-chevron-down ms-2"></i></a>
+                    <a href="#" class="show-more d-flex align-items-center">Xem thêm<i
+                            class="fa-solid fa-chevron-down ms-2"></i></a>
                 </div>
                 <div class="doc-information-details" id="experience">
                     <div class="detail-title">
@@ -170,7 +188,8 @@
                                 <li>Tháng 12/2020 - Tháng 1/2022</li>
                                 <li>2 năm 2 tháng</li>
                             </ul>
-                            <p>Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm sóc sức khỏe ban đầu và y học cấp cứu.</p>
+                            <p>Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm
+                                sóc sức khỏe ban đầu và y học cấp cứu.</p>
                         </div>
                     </div>
                     <div class="experience-info">
@@ -187,7 +206,8 @@
                                 <li>Tháng 12/2022 - Tháng 1/2023</li>
                                 <li>1 năm 1 tháng</li>
                             </ul>
-                            <p>Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm sóc sức khỏe ban đầu và y học cấp cứu.</p>
+                            <p>Có kinh nghiệm trong nhiều lĩnh vực y tế khác nhau, đặc biệt chuyên về chẩn đoán, chăm
+                                sóc sức khỏe ban đầu và y học cấp cứu.</p>
                         </div>
                     </div>
                 </div>
@@ -221,23 +241,31 @@
                         <div class="nav nav-container slide-2"></div>
                     </div>
                     <div class="availability-slots-slider owl-carousel" *ngIf="availableDates.length > 0">
-                        <div *ngFor="let slot of doctor.availableSlots" class="availability-date" 
-                             [class.selected]="selectedSlot?.slotId === slot.slotId"
-                             (click)="selectSlot(slot)"
-                             style="cursor: pointer;">
+                        <div *ngFor="let slot of doctor.availableSlots" class="availability-date"
+                            [class.selected]="selectedSlot?.slotId === slot.slotId" (click)="selectSlot(slot)"
+                            style="cursor: pointer;">
                             <div class="book-date">
                                 <h6>{{ formatDate(slot.slotDate) }}</h6>
                                 <span>{{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}</span>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="availableDates.length === 0" class="alert alert-info">
-                        Hiện tại bác sĩ chưa có lịch trống
-                    </div>
-                    <div *ngIf="selectedSlot" class="alert alert-success mt-3">
-                        <strong>Đã chọn:</strong> {{ formatDate(selectedSlot.slotDate) }} - {{ formatTime(selectedSlot.startTime) }} đến {{ formatTime(selectedSlot.endTime) }}
-                        <button class="btn btn-sm btn-primary ms-3" (click)="confirmBooking()">Xác nhận đặt lịch</button>
-                    </div>
+
+
+                    @if(availableDates.length === 0){
+                        <div class="alert alert-info">
+                            Hiện tại bác sĩ chưa có lịch trống
+                        </div>
+                    }
+                    @if (selectedSlot) {
+                        <div class="alert alert-success mt-3">
+                            <strong>Đã chọn:</strong> {{ formatDate(selectedSlot.slotDate) }} - {{
+                            formatTime(selectedSlot.startTime) }} đến {{ formatTime(selectedSlot.endTime) }}
+                            <button class="btn btn-sm btn-primary ms-3" (click)="confirmBooking()">Xác nhận đặt
+                                lịch</button>
+                        </div>
+                    }
+
                 </div>
                 <div class="doc-information-details" id="clinic">
                     <div class="detail-title">
@@ -271,7 +299,10 @@
                             </div>
                             <div class="col-lg-5">
                                 <div class="contact-map d-flex">
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.7301009561315!2d-76.13077892422932!3d36.82498697224007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89bae976cfe9f8af%3A0xa61eac05156fbdb9!2sBeachStreet%20USA!5e0!3m2!1sen!2sin!4v1669777904208!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.7301009561315!2d-76.13077892422932!3d36.82498697224007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89bae976cfe9f8af%3A0xa61eac05156fbdb9!2sBeachStreet%20USA!5e0!3m2!1sen!2sin!4v1669777904208!5m2!1sen!2sin"
+                                        allowfullscreen="" loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -283,8 +314,8 @@
                     </div>
                     <div class="member-ship-info">
                         <span class="mem-check"><i class="fa-solid fa-check"></i></span>
-                        <p>Thành viên liên kết bao gồm các chuyên gia y tế liên quan - dựa trên bằng chứng 
-                            (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp và Nhà tâm lý học lâm sàng) 
+                        <p>Thành viên liên kết bao gồm các chuyên gia y tế liên quan - dựa trên bằng chứng
+                            (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp và Nhà tâm lý học lâm sàng)
                             sẽ hợp tác với các bác sĩ y học để hỗ trợ phong trào Y học Lối sống.
                         </p>
                     </div>
@@ -299,14 +330,16 @@
                             <div class="award-card-info">
                                 <span><img src="assets/img/icons/bookmark-star.svg" alt="Img"></span>
                                 <h5>Giải thưởng (2021)</h5>
-                                <p>Dựa trên bằng chứng (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp)</p>
+                                <p>Dựa trên bằng chứng (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp)
+                                </p>
                             </div>
                         </div>
                         <div class="award-card">
                             <div class="award-card-info">
                                 <span><img src="assets/img/icons/bookmark-star.svg" alt="Img"></span>
                                 <h5>Giải thưởng (2022)</h5>
-                                <p>Dựa trên bằng chứng (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp)</p>
+                                <p>Dựa trên bằng chứng (Chuyên gia dinh dưỡng, Vật lý trị liệu, Trị liệu nghề nghiệp)
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -323,7 +356,8 @@
                                     <span>5 Tháng 2 2024</span>
                                 </div>
                                 <div class="availed">
-                                    <span class="badge doc-avail-badge"><i class="fa-solid fa-circle"></i>Có thể đặt lịch</span>
+                                    <span class="badge doc-avail-badge"><i class="fa-solid fa-circle"></i>Có thể đặt
+                                        lịch</span>
                                     <p>07:00 AM - 09:00 PM</p>
                                 </div>
                             </li>
@@ -363,5 +397,5 @@
         <!-- /Doctor Widget -->
 
     </div>
-</div>		
+</div>
 <!-- /Page Content -->

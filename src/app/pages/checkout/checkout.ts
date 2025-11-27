@@ -27,8 +27,7 @@ export class Checkout implements OnInit, OnDestroy {
   isSubmitting = false;
   
   // Form data
-  firstName = '';
-  lastName = '';
+  patientName = '';
   email = '';
   phone = '';
   notes = '';
@@ -102,8 +101,7 @@ export class Checkout implements OnInit, OnDestroy {
       .subscribe({
         next: (profile) => {
           this.userProfile = profile;
-          this.firstName = profile.firstName;
-          this.lastName = profile.lastName;
+          this.patientName = `${profile.firstName} ${profile.lastName}`;
           this.phone = profile.phone;
           this.email = userInfo.email || '';
           this.cdr.markForCheck();
@@ -121,18 +119,14 @@ export class Checkout implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.firstName || !this.lastName || !this.phone) {
+    if (!this.patientName || !this.phone || !this.email) {
       alert('Vui lòng điền đầy đủ thông tin');
       return;
     }
 
-    // Check if user is logged in
-    const userInfo = this.authService.getUserInfo();
-    if (!userInfo || !userInfo.userId) {
-      alert('Vui lòng đăng nhập để đặt lịch');
-      this.router.navigate(['/auth/login'], {
-        queryParams: { returnUrl: this.router.url }
-      });
+    // Check payment method
+    if (this.paymentMethod === 'credit-card') {
+      alert('Phương thức thanh toán bằng thẻ tín dụng đang trong quá trình bảo trì. Vui lòng chọn phương thức VNPay.');
       return;
     }
 
@@ -141,10 +135,14 @@ export class Checkout implements OnInit, OnDestroy {
       return;
     }
 
-    this.createAppointment(userInfo.userId);
+    // Get user info if logged in (optional)
+    const userInfo = this.authService.getUserInfo();
+    const patientId = userInfo?.userId || undefined;
+
+    this.createAppointment(patientId);
   }
 
-  private createAppointment(patientId: string): void {
+  private createAppointment(patientId?: string): void {
     if (!this.doctor || !this.slot) return;
 
     this.isSubmitting = true;
@@ -154,6 +152,9 @@ export class Checkout implements OnInit, OnDestroy {
       doctorId: this.doctor.userId,
       slotId: this.slot.slotId,
       patientId: patientId,
+      patientPhone: this.phone,
+      patientEmail: this.email,
+      patientName: this.patientName.trim(),
       notes: this.notes || ''
     };
 
@@ -163,7 +164,6 @@ export class Checkout implements OnInit, OnDestroy {
         next: (response) => {
           
           if (response.paymentUrl) {
-            // Save appointment info to localStorage before redirect
             const appointmentInfo = {
               appointmentId: response.appointmentId,
               doctorName: response.doctorName,
@@ -172,7 +172,6 @@ export class Checkout implements OnInit, OnDestroy {
             };
             localStorage.setItem('pendingAppointment', JSON.stringify(appointmentInfo));
 
-            // Validate URL before redirect
             if (response.paymentUrl.startsWith('http://') || response.paymentUrl.startsWith('https://')) {
               window.location.href = response.paymentUrl;
             } else {

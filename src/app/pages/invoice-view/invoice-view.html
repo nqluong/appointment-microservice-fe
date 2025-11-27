@@ -25,28 +25,32 @@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
-
-        <div *ngIf="loading" class="text-center py-5">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Đang tải...</span>
+        @if (loading) {
+            <div class="text-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Đang tải...</span>
+                </div>
             </div>
-        </div>
+        }
 
-        <div *ngIf="error" class="alert alert-danger" role="alert">
-            {{ error }}
-        </div>
-
-        <div *ngIf="appointment && !loading" class="row">
+        @if(error){
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        }
+        @if (appointment && !loading) {
+        <div class="row">
             <div class="col-lg-8 offset-lg-2">
                 <div class="card invoice-card">
                     <div class="card-body">
-                        
+
                         <!-- Invoice Header -->
                         <div class="invoice-header">
                             <div class="row align-items-center">
                                 <div class="col-sm-6">
                                     <h4 class="invoice-title">Chi tiết lịch hẹn</h4>
-                                    <p class="mb-0">Mã: <strong>#{{ appointment.appointmentId.substring(0, 8) }}</strong></p>
+                                    <p class="mb-0">Mã: <strong>#{{ appointment.appointmentId.substring(0, 8)
+                                            }}</strong></p>
                                 </div>
                                 <div class="col-sm-6 text-sm-end">
                                     <span class="badge" [ngClass]="getStatusClass(appointment.status)">
@@ -65,21 +69,26 @@
                                     <h6 class="text-muted mb-3">Thông tin bác sĩ</h6>
                                     <p class="mb-1"><strong>{{ appointment.doctorName }}</strong></p>
                                     <p class="mb-1 text-muted">{{ appointment.specialtyName }}</p>
-                                    <p class="mb-0 text-muted"><i class="feather-phone me-1"></i>{{ appointment.doctorPhone }}</p>
+                                    <p class="mb-0 text-muted"><i class="feather-phone me-1"></i>{{
+                                        appointment.doctorPhone }}</p>
                                 </div>
                                 <div class="col-sm-6 mb-4">
                                     <h6 class="text-muted mb-3">Thông tin bệnh nhân</h6>
                                     <p class="mb-1"><strong>{{ appointment.patientName }}</strong></p>
-                                    <p class="mb-1 text-muted"><i class="feather-mail me-1"></i>{{ appointment.patientEmail }}</p>
-                                    <p class="mb-0 text-muted"><i class="feather-phone me-1"></i>{{ appointment.patientPhone }}</p>
+                                    <p class="mb-1 text-muted"><i class="feather-mail me-1"></i>{{
+                                        appointment.patientEmail }}</p>
+                                    <p class="mb-0 text-muted"><i class="feather-phone me-1"></i>{{
+                                        appointment.patientPhone }}</p>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-sm-6 mb-4">
                                     <h6 class="text-muted mb-3">Thời gian khám</h6>
-                                    <p class="mb-1"><i class="feather-calendar me-2"></i>{{ formatDate(appointment.appointmentDate) }}</p>
-                                    <p class="mb-0"><i class="feather-clock me-2"></i>{{ formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}</p>
+                                    <p class="mb-1"><i class="feather-calendar me-2"></i>{{
+                                        formatDate(appointment.appointmentDate) }}</p>
+                                    <p class="mb-0"><i class="feather-clock me-2"></i>{{
+                                        formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}</p>
                                 </div>
                                 <div class="col-sm-6 mb-4">
                                     <h6 class="text-muted mb-3">Chi phí khám</h6>
@@ -87,12 +96,15 @@
                                 </div>
                             </div>
 
-                            <div class="row" *ngIf="appointment.notes">
+
+                            @if(appointment.notes){
+                            <div class="row">
                                 <div class="col-12 mb-4">
                                     <h6 class="text-muted mb-3">Ghi chú</h6>
                                     <p class="mb-0">{{ appointment.notes }}</p>
                                 </div>
                             </div>
+                            }
 
                             <div class="row">
                                 <div class="col-sm-6">
@@ -124,6 +136,8 @@
                 </div>
             </div>
         </div>
+        }
+
 
     </div>
 </div>

@@ -1,223 +1,220 @@
 <!-- Breadcrumb -->
-			<div class="breadcrumb-bar">
-				<div class="container">
-					<div class="row align-items-center inner-banner">
-						<div class="col-md-12 col-12 text-center">
-							<nav aria-label="breadcrumb" class="page-breadcrumb">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a routerLink="/"><i class="isax isax-home-15"></i></a></li>
-									<li class="breadcrumb-item" aria-current="page">Bệnh nhân</li>
-									<li class="breadcrumb-item active">Thanh toán</li>
-								</ol>
-								<h2 class="breadcrumb-title">Thanh toán</h2>
-							</nav>
-						</div>
-					</div>
-				</div>
-				<div class="breadcrumb-bg">
-					<img src="assets/img/bg/breadcrumb-bg-01.png" alt="img" class="breadcrumb-bg-01">
-					<img src="assets/img/bg/breadcrumb-bg-02.png" alt="img" class="breadcrumb-bg-02">
-					<img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-03">
-					<img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-04">
-				</div>
+<div class="breadcrumb-bar">
+	<div class="container">
+		<div class="row align-items-center inner-banner">
+			<div class="col-md-12 col-12 text-center">
+				<nav aria-label="breadcrumb" class="page-breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a routerLink="/"><i class="isax isax-home-15"></i></a></li>
+						<li class="breadcrumb-item" aria-current="page">Bệnh nhân</li>
+						<li class="breadcrumb-item active">Thanh toán</li>
+					</ol>
+					<h2 class="breadcrumb-title">Thanh toán</h2>
+				</nav>
 			</div>
-			<!-- /Breadcrumb -->
-			
-			<!-- Page Content -->
-			<div class="content">
-				<div class="container">
+		</div>
+	</div>
+	<div class="breadcrumb-bg">
+		<img src="assets/img/bg/breadcrumb-bg-01.png" alt="img" class="breadcrumb-bg-01">
+		<img src="assets/img/bg/breadcrumb-bg-02.png" alt="img" class="breadcrumb-bg-02">
+		<img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-03">
+		<img src="assets/img/bg/breadcrumb-icon.png" alt="img" class="breadcrumb-bg-04">
+	</div>
+</div>
+<!-- /Breadcrumb -->
 
-					<div *ngIf="loading" class="text-center py-5">
-						<div class="spinner-border" role="status">
-							<span class="visually-hidden">Đang tải...</span>
-						</div>
-					</div>
+<!-- Page Content -->
+<div class="content">
+	<div class="container">
+		@if (loading) {
+		<div class="text-center py-5">
+			<div class="spinner-border" role="status">
+				<span class="visually-hidden">Đang tải...</span>
+			</div>
+		</div>
+		}
 
-					<div *ngIf="error" class="alert alert-danger" role="alert">
-						{{ error }}
-					</div>
+		@if(error){
+		<div class="alert alert-danger" role="alert">
+			{{ error }}
+		</div>
+		}
 
-					<div *ngIf="!loading && !error" class="row">
-						<div class="col-md-7 col-lg-8">
-							<div class="card">
-								<div class="card-body">
-								
-									<!-- Checkout Form -->
-									<form (ngSubmit)="onSubmit()">
-									
-										<!-- Personal Information -->
-										<div class="info-widget">
-											<h4 class="card-title">Thông tin cá nhân</h4>
-											<div class="row">
-												<div class="col-md-6 col-sm-12">
-													<div class="mb-3 card-label">
-														<label class="mb-2">Họ</label>
-														<input class="form-control" type="text" [(ngModel)]="lastName" name="lastName" required>
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="mb-3 card-label">
-														<label class="mb-2">Tên</label>
-														<input class="form-control" type="text" [(ngModel)]="firstName" name="firstName" required>
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="mb-3 card-label">
-														<label class="mb-2">Email</label>
-														<input class="form-control" type="email" [(ngModel)]="email" name="email">
-													</div>
-												</div>
-												<div class="col-md-6 col-sm-12">
-													<div class="mb-3 card-label">
-														<label class="mb-2">Số điện thoại</label>
-														<input class="form-control" type="text" [(ngModel)]="phone" name="phone" required>
-													</div>
-												</div>
-												<div class="col-md-12">
-													<div class="mb-3 card-label">
-														<label class="mb-2">Ghi chú (không bắt buộc)</label>
-														<textarea class="form-control" rows="3" [(ngModel)]="notes" name="notes" placeholder="Triệu chứng, yêu cầu đặc biệt..."></textarea>
-													</div>
-												</div>
-											</div>
-											<div class="exist-customer" *ngIf="!userProfile">Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập tại đây</a></div>
-										</div>
-										<!-- /Personal Information -->
-										
-											<div class="payment-widget">
-												<h4 class="card-title">Phương thức thanh toán</h4>
-												
-												<!-- Credit Card Payment -->
-												<div class="payment-list">
-													<label class="payment-radio credit-card-option">
-														<input type="radio" name="paymentMethod" [(ngModel)]="paymentMethod" value="credit-card">
-														<span class="checkmark"></span>
-														Thẻ tín dụng
-													</label>
-												<div class="row">
-													<div class="col-md-6">
-														<div class="mb-3 card-label">
-															<label for="card_name">Name on Card</label>
-															<input class="form-control" id="card_name" type="text">
-														</div>
-													</div>
-													<div class="col-md-6">
-														<div class="mb-3 card-label">
-															<label for="card_number">Card Number</label>
-															<input class="form-control" id="card_number" placeholder="1234 5678 9876 5432" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="mb-3 card-label">
-															<label for="expiry_month">Expiry Month</label>
-															<input class="form-control" id="expiry_month" placeholder="MM" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="mb-3 card-label">
-															<label for="expiry_year">Expiry Year</label>
-															<input class="form-control" id="expiry_year" placeholder="YY" type="text">
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="mb-3 card-label">
-															<label for="cvv">CVV</label>
-															<input class="form-control" id="cvv" type="text">
-														</div>
-													</div>
-												</div>
-											</div>
-											<!-- /Credit Card Payment -->
-											
-												<!-- VNPay Payment -->
-												<div class="payment-list">
-													<label class="payment-radio paypal-option">
-														<input type="radio" name="paymentMethod" [(ngModel)]="paymentMethod" value="vnpay">
-														<span class="checkmark"></span>
-														VNPay
-													</label>
-												</div>
-											<!-- /Paypal Payment -->
-											
-												<!-- Terms Accept -->
-												<div class="terms-accept">
-													<div class="custom-checkbox">
-													   <input type="checkbox" id="terms_accept" [(ngModel)]="acceptTerms" name="acceptTerms">
-													   <label for="terms_accept">Tôi đã đọc và đồng ý với <a href="#">Điều khoản &amp; Điều kiện</a></label>
-													</div>
-												</div>
-											<!-- /Terms Accept -->
-											
-												<!-- Submit Section -->
-												<div class="submit-section mt-4">
-													<button type="submit" class="btn btn-primary submit-btn" [disabled]="!acceptTerms || isSubmitting">
-														<span *ngIf="!isSubmitting">Xác nhận và Thanh toán</span>
-														<span *ngIf="isSubmitting">
-															<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-															Đang xử lý...
-														</span>
-													</button>
-												</div>
-											<!-- /Submit Section -->
-											
-										</div>
-									</form>
-									<!-- /Checkout Form -->
-									
-								</div>
-							</div>
-							
-						</div>
-						
-						<div class="col-md-5 col-lg-4 theiaStickySidebar">
-						
-							<!-- Booking Summary -->
-							<div class="card booking-card" *ngIf="doctor && slot">
-								<div class="card-header">
-									<h4 class="card-title">Tóm tắt đặt lịch</h4>
-								</div>
-								<div class="card-body">
-								
-									<!-- Booking Doctor Info -->
-									<div class="booking-doc-info">
-										<a [routerLink]="['/doctor-profile', doctor.userId]" class="booking-doc-img">
-											<img [src]="doctor.avatarUrl || 'assets/img/doctors/doctor-thumb-02.jpg'" [alt]="doctor.fullName">
-										</a>
-										<div class="booking-info">
-											<h4><a [routerLink]="['/doctor-profile', doctor.userId]">{{ doctor.fullName }}</a></h4>
-											<p class="doc-speciality">{{ doctor.qualification }} - {{ doctor.specialtyName }}</p>
-											<p class="text-muted mb-0"><i class="feather-phone"></i> {{ doctor.phone }}</p>
+		@if(!loading && !error){
+		<div class="row">
+			<div class="col-md-7 col-lg-8">
+				<div class="card">
+					<div class="card-body">
+
+						<!-- Checkout Form -->
+						<form (ngSubmit)="onSubmit()">
+
+							<!-- Personal Information -->
+							<div class="info-widget">
+								<h4 class="card-title">Thông tin cá nhân</h4>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="mb-3 card-label">
+											<label class="mb-2">Họ và tên <span class="text-danger">*</span></label>
+											<input class="form-control" type="text" [(ngModel)]="patientName"
+												name="patientName" placeholder="Nhập họ và tên đầy đủ" required>
 										</div>
 									</div>
-									<!-- Booking Doctor Info -->
-									
-									<div class="booking-summary">
-										<div class="booking-item-wrap">
-											<ul class="booking-date">
-												<li>Ngày :<span> {{ formatDate(slot.slotDate) }}</span></li>
-												<li>Giờ :<span> {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}</span></li>
-											</ul>
-											<ul class="booking-fee">
-												<li>Phí tư vấn <span>{{ formatPrice(doctor.consultationFee) }}</span></li>
-											</ul>
-											<div class="booking-total">
-												<ul class="booking-total-list">
-													<li>
-														<span>Tổng cộng</span>
-														<span class="total-cost">{{ formatPrice(doctor.consultationFee) }}</span>
-													</li>
-												</ul>
-											</div>
+									<div class="col-md-6 col-sm-12">
+										<div class="mb-3 card-label">
+											<label class="mb-2">Email <span class="text-danger">*</span></label>
+											<input class="form-control" type="email" [(ngModel)]="email" name="email"
+												placeholder="example@email.com" required>
+										</div>
+									</div>
+									<div class="col-md-6 col-sm-12">
+										<div class="mb-3 card-label">
+											<label class="mb-2">Số điện thoại <span class="text-danger">*</span></label>
+											<input class="form-control" type="text" [(ngModel)]="phone" name="phone"
+												placeholder="0123456789" required>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="mb-3 card-label">
+											<label class="mb-2">Ghi chú (không bắt buộc)</label>
+											<textarea class="form-control" rows="3" [(ngModel)]="notes" name="notes"
+												placeholder="Triệu chứng, yêu cầu đặc biệt..."></textarea>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- /Booking Summary -->
-							
-						</div>
-					</div>
 
+								@if (!userProfile) {
+								<div class="exist-customer">Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập tại
+										đây</a></div>
+								}
+							</div>
+							<!-- /Personal Information -->
+
+							<div class="payment-widget">
+								<h4 class="card-title">Phương thức thanh toán</h4>
+
+								<!-- Credit Card Payment -->
+								<div class="payment-list payment-disabled">
+									<label class="payment-radio credit-card-option">
+										<input type="radio" name="paymentMethod" [(ngModel)]="paymentMethod"
+											value="credit-card">
+										<span class="checkmark"></span>
+										<span class="payment-method-text">
+											Thẻ tín dụng
+											<span class="badge bg-warning text-dark ms-2">Đang bảo trì</span>
+										</span>
+									</label>
+									<div class="alert alert-warning mt-2 mb-0" role="alert">
+										<i class="feather-alert-circle me-2"></i>
+										Phương thức thanh toán bằng thẻ tín dụng hiện đang trong quá trình bảo trì. Vui lòng sử dụng VNPay.
+									</div>
+								</div>
+								<!-- /Credit Card Payment -->
+
+								<!-- VNPay Payment -->
+								<div class="payment-list">
+									<label class="payment-radio paypal-option">
+										<input type="radio" name="paymentMethod" [(ngModel)]="paymentMethod"
+											value="vnpay">
+										<span class="checkmark"></span>
+										VNPay
+									</label>
+								</div>
+								<!-- /Paypal Payment -->
+
+								<!-- Terms Accept -->
+								<div class="terms-accept">
+									<div class="custom-checkbox">
+										<input type="checkbox" id="terms_accept" [(ngModel)]="acceptTerms"
+											name="acceptTerms">
+										<label for="terms_accept">Tôi đã đọc và đồng ý với <a href="#">Điều khoản &amp;
+												Điều kiện</a></label>
+									</div>
+								</div>
+								<!-- /Terms Accept -->
+
+								<!-- Submit Section -->
+								<div class="submit-section mt-4">
+									<button type="submit" class="btn btn-primary submit-btn"
+										[disabled]="!acceptTerms || isSubmitting">
+										@if (!isSubmitting) {
+										<span>Xác nhận và Thanh toán</span>
+										} @else {
+										<span>
+											<span class="spinner-border spinner-border-sm me-2" role="status"
+												aria-hidden="true"></span>
+											Đang xử lý...
+										</span>
+										}
+
+									</button>
+								</div>
+								<!-- /Submit Section -->
+
+							</div>
+						</form>
+						<!-- /Checkout Form -->
+
+					</div>
 				</div>
 
-			</div>		
-			<!-- /Page Content -->
+			</div>
+
+			<div class="col-md-5 col-lg-4 theiaStickySidebar">
+
+				<!-- Booking Summary -->
+				@if(doctor && slot){
+				<div class="card booking-card">
+					<div class="card-header">
+						<h4 class="card-title">Tóm tắt đặt lịch</h4>
+					</div>
+					<div class="card-body">
+
+						<!-- Booking Doctor Info -->
+						<div class="booking-doc-info">
+							<a [routerLink]="['/doctor-profile', doctor.userId]" class="booking-doc-img">
+								<img [src]="doctor.avatarUrl || 'assets/img/doctors/doctor-thumb-02.jpg'"
+									[alt]="doctor.fullName">
+							</a>
+							<div class="booking-info">
+								<h4><a [routerLink]="['/doctor-profile', doctor.userId]">{{ doctor.fullName }}</a></h4>
+								<p class="doc-speciality">{{ doctor.qualification }} - {{ doctor.specialtyName }}</p>
+								<p class="text-muted mb-0"><i class="feather-phone"></i> {{ doctor.phone }}</p>
+							</div>
+						</div>
+						<!-- Booking Doctor Info -->
+
+						<div class="booking-summary">
+							<div class="booking-item-wrap">
+								<ul class="booking-date">
+									<li>Ngày :<span> {{ formatDate(slot.slotDate) }}</span></li>
+									<li>Giờ :<span> {{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime)
+											}}</span></li>
+								</ul>
+								<ul class="booking-fee">
+									<li>Phí tư vấn <span>{{ formatPrice(doctor.consultationFee) }}</span></li>
+								</ul>
+								<div class="booking-total">
+									<ul class="booking-total-list">
+										<li>
+											<span>Tổng cộng</span>
+											<span class="total-cost">{{ formatPrice(doctor.consultationFee) }}</span>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				}
+
+				<!-- /Booking Summary -->
+
+			</div>
+		</div>
+		}
+
+	</div>
+
+</div>
+<!-- /Page Content -->

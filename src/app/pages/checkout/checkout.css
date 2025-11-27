@@ -1,0 +1,54 @@
+/* Payment Method Styles */
+.payment-list {
+  margin-bottom: 20px;
+}
+
+.payment-disabled {
+  opacity: 0.7;
+}
+
+.payment-method-text {
+  display: inline-flex;
+  align-items: center;
+}
+
+.payment-method-text .badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  font-weight: 500;
+}
+
+.payment-list .alert {
+  font-size: 14px;
+  padding: 10px 15px;
+  border-left: 3px solid #ffc107;
+}
+
+.payment-list .alert i {
+  font-size: 16px;
+  vertical-align: middle;
+}
+
+/* Exist Customer Link */
+.exist-customer {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.exist-customer a {
+  color: #0d6efd;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.exist-customer a:hover {
+  text-decoration: underline;
+}
+
+/* Required Field Indicator */
+.text-danger {
+  color: #dc3545;
+}

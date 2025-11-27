@@ -3,24 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import {ApiResponse, LoginRequest, RegisterRequest, LoginData, UserInfo } from './auth.models';
+import {ApiResponse, LoginRequest, RegisterRequest, LoginData, UserInfo, RefreshTokenRequest, RefreshTokenData } from './auth.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
     
-private readonly API_URL = 'http://localhost:8080/api';
+  private readonly API_URL = 'http://localhost:8080/api';
   private currentUserSubject = new BehaviorSubject<UserInfo | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  private refreshTokenTimeout?: any;
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
-    // Initialize user info only in browser environment
     if (typeof window !== 'undefined') {
       this.currentUserSubject.next(this.getUserInfo());
+      this.startRefreshTokenTimer();
     }
   }
 
@@ -52,13 +53,14 @@ private readonly API_URL = 'http://localhost:8080/api';
   }
 
   logout(): void {
+    this.stopRefreshTokenTimer();
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userInfo');
     }
     this.currentUserSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   getToken(): string | null {
@@ -69,6 +71,28 @@ private readonly API_URL = 'http://localhost:8080/api';
   getRefreshToken(): string | null {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('refreshToken');
+  }
+
+  refreshToken(): Observable<ApiResponse<RefreshTokenData>> {
+    const refreshToken = this.getRefreshToken();
+    return this.http.post<ApiResponse<RefreshTokenData>>(
+      `${this.API_URL}/auth/refresh-token`,
+      { refreshToken }
+    ).pipe(
+      tap(response => {
+        if (response.success && response.data) {
+          this.updateTokens(response.data);
+        }
+      })
+    );
+  }
+
+  private updateTokens(data: RefreshTokenData): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('authToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      this.startRefreshTokenTimer();
+    }
   }
 
   private saveAuthData(data: LoginData): void {
@@ -84,6 +108,35 @@ private readonly API_URL = 'http://localhost:8080/api';
       
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
       this.currentUserSubject.next(userInfo);
+      this.startRefreshTokenTimer();
+    }
+  }
+
+  private startRefreshTokenTimer(): void {
+    const token = this.getToken();
+    if (!token) return;
+
+    const jwtToken = JSON.parse(atob(token.split('.')[1]));
+    const expires = new Date(jwtToken.exp * 1000);
+    const timeout = expires.getTime() - Date.now() - (60 * 1000); 
+    if (timeout > 0) {
+      this.refreshTokenTimeout = setTimeout(() => {
+        this.refreshToken().subscribe({
+          next: () => {
+            console.log('Token refreshed successfully');
+          },
+          error: (err) => {
+            console.error('Failed to refresh token:', err);
+            this.logout();
+          }
+        });
+      }, timeout);
+    }
+  }
+
+  private stopRefreshTokenTimer(): void {
+    if (this.refreshTokenTimeout) {
+      clearTimeout(this.refreshTokenTimeout);
     }
   }
 

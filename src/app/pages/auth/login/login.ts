@@ -90,7 +90,6 @@ export class Login implements OnInit {
     this.successMessage = message || 'Đăng nhập thành công!';
     this.cdr.markForCheck();
 
-    // Redirect về returnUrl hoặc trang chủ sau 1s
     setTimeout(() => {
       window.location.href = this.returnUrl;
     }, 1000);

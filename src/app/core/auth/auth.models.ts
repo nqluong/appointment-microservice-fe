@@ -38,3 +38,12 @@ export interface UserInfo {
   email: string;
   userRoles: string[];
 }
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+export interface RefreshTokenData {
+  accessToken: string;
+  refreshToken: string;
+}

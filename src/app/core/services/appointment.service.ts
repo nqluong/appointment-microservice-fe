@@ -5,7 +5,10 @@ import { Observable } from 'rxjs';
 export interface CreateAppointmentRequest {
   doctorId: string;
   slotId: string;
-  patientId: string;
+  patientId?: string;
+  patientPhone: string;
+  patientEmail: string;
+  patientName: string;
   notes: string;
 }
 

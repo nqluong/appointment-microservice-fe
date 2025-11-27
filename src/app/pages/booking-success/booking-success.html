@@ -27,9 +27,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                
-                <!-- Loading State -->
-                <div *ngIf="loading" class="card success-card">
+                @if(loading){
+                <div class="card success-card">
                     <div class="card-body">
                         <div class="success-cont">
                             <div class="spinner-border text-primary" role="status">
@@ -39,25 +38,36 @@
                         </div>
                     </div>
                 </div>
+                }
 
-                <!-- Success Card -->
-                <div *ngIf="!loading && isSuccess" class="card success-card">
+                @if(!loading && isSuccess){
+                <div class="card success-card">
                     <div class="card-body">
                         <div class="success-cont">
                             <i class="fas fa-check"></i>
                             <h3>Thanh toán cho lịch hẹn thành công!</h3>
-                            <p *ngIf="doctorName && appointmentDate && appointmentTime">
+
+                            @if(doctorName && appointmentDate && appointmentTime){
+                            <p>
                                 Lịch hẹn với <strong>{{ doctorName }}</strong><br>
                                 vào <strong>{{ formatDate(appointmentDate) }} lúc {{ appointmentTime }}</strong>
                             </p>
-                            <p *ngIf="!doctorName || !appointmentDate || !appointmentTime">
+                            }
+
+                            @if(!doctorName || !appointmentDate || !appointmentTime){
+                            <p>
                                 Lịch hẹn của bạn đã được đặt thành công!<br>
                                 Vui lòng kiểm tra email để xem chi tiết.
                             </p>
+
+                            }
                             <div class="success-actions">
-                                <button *ngIf="appointmentId" class="btn btn-primary me-2" (click)="viewInvoice()">
+                                @if (appointmentId) {
+                                <button class="btn btn-primary me-2" (click)="viewInvoice()">
                                     Xem chi tiết
                                 </button>
+                                }
+
                                 <button class="btn btn-outline-primary" (click)="goToHome()">
                                     Về trang chủ
                                 </button>
@@ -65,9 +75,11 @@
                         </div>
                     </div>
                 </div>
+                }
 
-                <!-- Error Card -->
-                <div *ngIf="!loading && !isSuccess" class="card error-card">
+
+                @if(!loading && !isSuccess){
+                <div class="card error-card">
                     <div class="card-body">
                         <div class="error-cont">
                             <i class="fas fa-times-circle"></i>
@@ -88,6 +100,8 @@
                         </div>
                     </div>
                 </div>
+                }
+
 
             </div>
         </div>
