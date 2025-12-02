@@ -64,4 +64,16 @@ export class AppointmentService {
   getAppointmentDetail(appointmentId: string): Observable<AppointmentDetail> {
     return this.http.get<AppointmentDetail>(`${this.apiUrl}/appointments/${appointmentId}`);
   }
+
+  syncPaymentStatus(transactionId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/payments/sync-status?transactionId=${transactionId}`, {});
+  }
+
+  confirmPayment(paymentId?: string, transactionId?: string): Observable<any> {
+    const params: any = {};
+    if (paymentId) params.paymentId = paymentId;
+    if (transactionId) params.transactionId = transactionId;
+    
+    return this.http.post(`${this.apiUrl}/payments/confirm-payment`, null, { params });
+  }
 }

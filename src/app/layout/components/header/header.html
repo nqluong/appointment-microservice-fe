@@ -108,13 +108,13 @@
 									<p class="text-muted mb-0">{{ currentUser?.email }}</p>
 								</div>
 							</div>
-							<a class="dropdown-item" routerLink="/profile">
+							<a class="dropdown-item" [routerLink]="['/profile']">
 								<i class="feather-user me-2"></i>Hồ sơ
 							</a>
-							<a class="dropdown-item" routerLink="/appointments">
+							<a class="dropdown-item" [routerLink]="['/patient/appointments']">
 								<i class="feather-calendar me-2"></i>Lịch hẹn
 							</a>
-							<a class="dropdown-item" routerLink="/settings">
+							<a class="dropdown-item" [routerLink]="['/settings']">
 								<i class="feather-settings me-2"></i>Cài đặt
 							</a>
 							<div class="dropdown-divider"></div>

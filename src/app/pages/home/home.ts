@@ -19,5 +19,4 @@ import { BlogSection } from '../../layout/components/blog-section/blog-section';
   styleUrl: './home.css'
 })
 export class Home {
-
 }

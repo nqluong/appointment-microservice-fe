@@ -164,16 +164,19 @@ export class Checkout implements OnInit, OnDestroy {
         next: (response) => {
           
           if (response.paymentUrl) {
-            const appointmentInfo = {
-              appointmentId: response.appointmentId,
-              doctorName: response.doctorName,
-              appointmentDate: response.appointmentDate,
-              appointmentTime: `${this.formatTime(response.startTime)} - ${this.formatTime(response.endTime)}`
-            };
-            localStorage.setItem('pendingAppointment', JSON.stringify(appointmentInfo));
+            if (typeof window !== 'undefined') {
+              const appointmentInfo = {
+                appointmentId: response.appointmentId,
+                doctorName: response.doctorName,
+                appointmentDate: response.appointmentDate,
+                appointmentTime: `${this.formatTime(response.startTime)} - ${this.formatTime(response.endTime)}`
+              };
+              localStorage.setItem('pendingAppointment', JSON.stringify(appointmentInfo));
+            }
 
             if (response.paymentUrl.startsWith('http://') || response.paymentUrl.startsWith('https://')) {
-              window.location.href = response.paymentUrl;
+              // Fire-and-forget: Confirm payment before redirect
+              this.confirmPaymentBeforeRedirect(response.paymentId, response.paymentUrl);
             } else {
               console.error('Invalid payment URL:', response.paymentUrl);
               alert('URL thanh toán không hợp lệ');
@@ -222,5 +225,24 @@ export class Checkout implements OnInit, OnDestroy {
 
   formatTime(timeStr: string): string {
     return timeStr.substring(0, 5);
+  }
+
+  private confirmPaymentBeforeRedirect(paymentId: string, paymentUrl: string): void {
+    // Call confirm payment API asynchronously
+    this.appointmentService.confirmPayment(paymentId).subscribe({
+      next: () => {
+        console.log('Xác nhận thanh toán, chuyển tới VNPAY');
+      },
+      error: (err) => {
+        console.error('Xác nhận thanh toán thất bại: ', err);
+        // Continue redirect even if confirmation fails
+      }
+    });
+
+    // Redirect immediately without waiting for API response
+    // Small delay to ensure API call is sent
+    setTimeout(() => {
+      window.location.href = paymentUrl;
+    }, 100);
   }
 }

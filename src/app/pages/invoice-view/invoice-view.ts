@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -23,7 +23,8 @@ export class InvoiceView implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private appointmentService: AppointmentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -52,15 +53,21 @@ export class InvoiceView implements OnInit, OnDestroy {
   }
 
   private loadAppointmentDetail(appointmentId: string): void {
+    console.log('Loading appointment detail for ID:', appointmentId);
+    
     this.appointmentService.getAppointmentDetail(appointmentId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (appointment) => {
+          console.log('Appointment loaded successfully:', appointment);
           this.appointment = appointment;
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
           console.error('Error loading appointment:', err);
+          console.error('Error status:', err.status);
+          console.error('Error message:', err.message);
           
           // Handle 401 Unauthorized
           if (err.status === 401) {
@@ -72,6 +79,7 @@ export class InvoiceView implements OnInit, OnDestroy {
           
           this.error = err.error?.message || 'Không thể tải thông tin lịch hẹn';
           this.loading = false;
+          this.cdr.markForCheck();
         }
       });
   }

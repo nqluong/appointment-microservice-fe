@@ -3,6 +3,8 @@ export interface Doctor {
   fullName: string;
   gender: 'MALE' | 'FEMALE';
   phone: string;
+  avatarUrl: string;
+  licenseNumber?: string;
   qualification: string;
   yearsOfExperience: number;
   consultationFee: number;

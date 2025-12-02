@@ -25,9 +25,7 @@ export class AdminLayout implements OnInit , OnDestroy{
 
   ngOnInit(): void {
     this.removeUserStyles();
-    
     this.loadAdminStyles();
-    
     this.loadAdminScripts();
   }
 

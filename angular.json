@@ -29,13 +29,29 @@
               "src/assets/css/owl.carousel.min.css",
               "src/assets/plugins/select2/css/select2.min.css",
               "src/assets/css/aos.css",
-              "src/assets/css/custom.css"
+              "src/assets/css/custom.css",
+              "src/assets/css/slick.css",
+              "src/assets/css/bootstrap-datetimepicker.min.css",
+              "src/assets/plugins/swiper/swiper.min.css",
+              "src/assets/plugins/jquery-ui/jquery-ui.min.css",
+              "src/assets/plugins/fancybox/jquery.fancybox.min.css"
             ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            "scripts": [
+              "src/assets/js/jquery-3.7.1.min.js",
+              "src/assets/js/bootstrap.bundle.min.js",
+              "src/assets/js/owl.carousel.min.js",
+              "src/assets/js/slick.js",
+              "src/assets/js/moment.min.js",
+              "src/assets/js/bootstrap-datetimepicker.min.js",
+              "src/assets/plugins/select2/js/select2.min.js",
+              "src/assets/js/aos.js",
+              "src/assets/plugins/swiper/swiper.min.js",
+              "src/assets/plugins/fancybox/jquery.fancybox.min.js",
+              "src/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js",
+              "src/assets/js/backToTop.js",
+              "src/assets/js/script.js",
+              "src/assets/js/theme-script.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -59,7 +75,7 @@
               "sourceMap": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular/build:dev-server",

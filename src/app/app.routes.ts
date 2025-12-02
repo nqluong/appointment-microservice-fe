@@ -13,6 +13,7 @@ import { Booking } from './pages/booking/booking';
 import { Checkout } from './pages/checkout/checkout';
 import { BookingSuccess } from './pages/booking-success/booking-success';
 import { InvoiceView } from './pages/invoice-view/invoice-view';
+import { PatientAppointments } from './pages/patient/patient-appointments/patient-appointments';
 
 export const routes: Routes = [
   {
@@ -42,6 +43,10 @@ export const routes: Routes = [
       {
         path: 'invoice/:id',
         component: InvoiceView
+      },
+      {
+        path: 'patient/appointments',
+        component: PatientAppointments
       }
     ]
   },

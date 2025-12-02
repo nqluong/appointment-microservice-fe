@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AppointmentService } from '../../core/services/appointment.service';
 
 @Component({
   selector: 'app-booking-success',
@@ -20,21 +21,21 @@ export class BookingSuccess implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private appointmentService: AppointmentService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const responseCode = params['vnp_ResponseCode'];
+      const transactionNo = params['vnp_TxnRef'];
       
-      // Try to get appointment info from query params first
       this.appointmentId = params['appointmentId'];
       this.doctorName = params['doctorName'];
       this.appointmentDate = params['date'];
       this.appointmentTime = params['time'];
 
-      // If not in query params, try to get from localStorage (VNPay callback)
-      if (!this.appointmentId && responseCode) {
+      if (!this.appointmentId && responseCode && typeof window !== 'undefined') {
         const savedInfo = localStorage.getItem('pendingAppointment');
         if (savedInfo) {
           try {
@@ -43,7 +44,6 @@ export class BookingSuccess implements OnInit {
             this.doctorName = info.doctorName;
             this.appointmentDate = info.appointmentDate;
             this.appointmentTime = info.appointmentTime;
-            // Clear after use
             localStorage.removeItem('pendingAppointment');
           } catch (e) {
             console.error('Error parsing appointment info:', e);
@@ -58,11 +58,23 @@ export class BookingSuccess implements OnInit {
         this.isSuccess = false;
         this.errorMessage = this.getErrorMessage(responseCode);
       } else {
-        // Direct access without payment (for testing or other flows)
         this.isSuccess = true;
       }
 
       this.loading = false;
+    });
+  }
+
+  private syncPaymentStatus(transactionId: string): void {
+    // Call API asynchronously without waiting for response
+    this.appointmentService.syncPaymentStatus(transactionId).subscribe({
+      next: () => {
+        console.log('Payment status synced successfully');
+      },
+      error: (err) => {
+        console.error('Failed to sync payment status:', err);
+        // Don't show error to user, just log it
+      }
     });
   }
 

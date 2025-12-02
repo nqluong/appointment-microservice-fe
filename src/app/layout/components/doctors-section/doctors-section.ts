@@ -36,7 +36,6 @@ export class DoctorsSection implements OnInit, OnDestroy {
   private loadDoctors(): void {
     this.loading = true;
     this.error = null;
-    this.cdr.markForCheck();
 
     this.doctorService.getPublicDoctors()
       .pipe(takeUntil(this.destroy$))
@@ -44,15 +43,49 @@ export class DoctorsSection implements OnInit, OnDestroy {
         next: (response) => {
           this.doctors = response.content;
           this.loading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error('Error loading doctors:', err);
           this.error = 'Không thể tải danh sách bác sĩ. Vui lòng thử lại sau.';
           this.loading = false;
-          this.cdr.markForCheck();
+          
+          // Fallback: Load mock data for testing UI
+          this.loadMockDoctors();
+          this.cdr.detectChanges();
         }
       });
+  }
+
+  private loadMockDoctors(): void {
+    // Mock data for testing UI when backend is not available
+    this.doctors = [
+      {
+        userId: '1',
+        fullName: 'Dr. John Doe',
+        specialization: 'Cardiology',
+        experience: 10,
+        consultationFee: 500000,
+        gender: 'MALE',
+        email: 'john@example.com',
+        phoneNumber: '0123456789',
+        address: 'Hanoi',
+        avatarFilePath: 'assets/img/doctors/doctor-thumb-02.jpg'
+      },
+      {
+        userId: '2',
+        fullName: 'Dr. Jane Smith',
+        specialization: 'Dermatology',
+        experience: 8,
+        consultationFee: 400000,
+        gender: 'FEMALE',
+        email: 'jane@example.com',
+        phoneNumber: '0987654321',
+        address: 'Ho Chi Minh',
+        avatarFilePath: 'assets/img/doctors/doctor-thumb-02.jpg'
+      }
+    ];
+    this.error = 'Đang sử dụng dữ liệu mẫu (Backend chưa kết nối)';
   }
 
   formatPrice(price: number): string {
@@ -64,5 +97,9 @@ export class DoctorsSection implements OnInit, OnDestroy {
 
   getGenderDisplay(gender: string): string {
     return gender === 'MALE' ? 'Nam' : 'Nữ';
+  }
+
+  handleImageError(event: any): void {
+    event.target.src = 'assets/img/doctors/doctor-thumb-02.jpg';
   }
 }

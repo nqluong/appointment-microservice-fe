@@ -1,1 +1,31 @@
 /* Doctors Section Styles */
+
+/* Fix doctor card image size */
+.doctors-header {
+  position: relative;
+  overflow: hidden;
+}
+
+.doctors-header img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Ensure all doctor cards have same height */
+.our-doctors-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctors-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctors-body .row-sm {
+  margin-top: auto;
+}
