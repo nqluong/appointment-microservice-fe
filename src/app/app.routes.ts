@@ -3,9 +3,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { AuthLayout } from './layout/auth-layout/auth-layout';
 import { Login } from './pages/auth/login/login';
 import { AdminLayout } from './layout/admin-layout/admin-layout';
-import { Dashbroad } from './pages/admin/dashbroad/dashbroad';
-import { provideRouter } from '@angular/router';
-import { authGuard, guestGuard } from './core/auth/auth.guard';
+import { PatientLayout } from './layout/patient-layout/patient-layout';
 import { Register } from './pages/auth/register/register';
 import { DoctorProfile } from './pages/doctor-profile/doctor-profile';
 import { Home } from './pages/home/home';
@@ -14,6 +12,7 @@ import { Checkout } from './pages/checkout/checkout';
 import { BookingSuccess } from './pages/booking-success/booking-success';
 import { InvoiceView } from './pages/invoice-view/invoice-view';
 import { PatientAppointments } from './pages/patient/patient-appointments/patient-appointments';
+import { DetailAppointments } from './pages/patient/detail-appointments/detail-appointments';
 
 export const routes: Routes = [
   {
@@ -22,7 +21,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: Home
+        component: Home,
+        pathMatch: 'full'
       },
       {
         path: 'doctor-profile/:id',
@@ -43,10 +43,6 @@ export const routes: Routes = [
       {
         path: 'invoice/:id',
         component: InvoiceView
-      },
-      {
-        path: 'patient/appointments',
-        component: PatientAppointments
       }
     ]
   },
@@ -68,6 +64,20 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     // canActivate: [authGuard],
+  },
+  {
+    path: 'patient',
+    component: PatientLayout,
+    children: [
+      {
+        path: 'appointments',
+        component: PatientAppointments
+      },
+      {
+        path: 'appointments/:id',
+        component: DetailAppointments
+      }
+    ]
   },
   {
     path: '**',

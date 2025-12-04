@@ -5,9 +5,6 @@
 			<div class="navbar-header">
 				<a id="mobile_btn" href="javascript:void(0);">
 					<span class="bar-icon">
-						<span></span>
-						<span></span>
-						<span></span>
 					</span>
 				</a>
 				<a href="index.html" class="navbar-brand logo">
@@ -35,7 +32,7 @@
 						<ul class="submenu">
 							<li><a href="about-us.html">Về chúng tôi</a></li>
 							<li><a href="contact-us.html">Liên hệ</a></li>
-				
+
 							<li><a href="hospitals.html">Bệnh viện</a></li>
 							<li><a href="speciality.html">Chuyên khoa</a></li>
 							<li><a href="clinic.html">Phòng khám</a></li>
@@ -70,12 +67,9 @@
 							<li><a href="pharmacy/index.html" target="_blank">Quản lý nhà thuốc</a></li>
 						</ul>
 					</li>
-					<li class="login-link">
-						<a href="login.html">Đăng nhập / Đăng ký</a>
-					</li>
 				</ul>
 			</div>
-			<ul class="nav header-navbar-rht">
+			<ul class="nav header-navbar-rht" *ngIf="!isPatientPage">
 				<li class="header-theme me-1">
 					<a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle">
 						<i class="isax isax-sun-1"></i>
@@ -85,13 +79,16 @@
 					</a>
 				</li>
 				<li class="contact-item"><i class="isax isax-call"></i><span>Liên hệ :</span>+1 315 369 5943</li>
-				
+			</ul>
+			<ul>
 				<!-- Not Authenticated -->
 				<li class="nav-item" *ngIf="!isAuthenticated">
 					<a class="nav-link btn btn-primary header-login d-inline-flex align-items-center"
 						routerLink="/auth/login"><i class="isax isax-user-octagon"></i>Đăng nhập / Đăng ký </a>
 				</li>
 
+				<div>
+					<!-- Authenticated User Menu -->
 				<li class="nav-item user-menu" *ngIf="isAuthenticated">
 					<a href="javascript:void(0);" class="nav-link user-link" (click)="toggleUserMenu($event)">
 						<span class="user-img">
@@ -100,7 +97,7 @@
 						<span class="user-name">{{ getUserDisplayName() }}</span>
 						<i class="fas fa-chevron-down ms-1"></i>
 					</a>
-					<div class="user-dropdown" [class.show]="showUserMenu">
+					<div class="user-dropdown">
 						<div class="dropdown-menu dropdown-menu-end" [class.show]="showUserMenu">
 							<div class="user-header">
 								<div class="user-text">
@@ -108,13 +105,14 @@
 									<p class="text-muted mb-0">{{ currentUser?.email }}</p>
 								</div>
 							</div>
-							<a class="dropdown-item" [routerLink]="['/profile']">
+							<a class="dropdown-item" [routerLink]="['/profile']" (click)="showUserMenu = false">
 								<i class="feather-user me-2"></i>Hồ sơ
 							</a>
-							<a class="dropdown-item" [routerLink]="['/patient/appointments']">
+							<a class="dropdown-item" [routerLink]="['/patient/appointments']"
+								(click)="showUserMenu = false">
 								<i class="feather-calendar me-2"></i>Lịch hẹn
 							</a>
-							<a class="dropdown-item" [routerLink]="['/settings']">
+							<a class="dropdown-item" [routerLink]="['/settings']" (click)="showUserMenu = false">
 								<i class="feather-settings me-2"></i>Cài đặt
 							</a>
 							<div class="dropdown-divider"></div>
@@ -124,6 +122,7 @@
 						</div>
 					</div>
 				</li>
+				</div>
 			</ul>
 		</nav>
 	</div>

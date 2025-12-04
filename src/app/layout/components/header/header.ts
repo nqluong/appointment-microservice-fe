@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { AuthService } from '../../../core/auth/auth.service';
 import { UserInfo } from '../../../core/auth/auth.models';
 
@@ -17,9 +17,13 @@ export class Header implements OnInit, OnDestroy {
   currentUser: UserInfo | null = null;
   isAuthenticated = false;
   showUserMenu = false;
+  isPatientPage = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$
@@ -29,10 +33,27 @@ export class Header implements OnInit, OnDestroy {
         this.isAuthenticated = !!user;
       });
 
+    // Check current route
+    this.checkRoute(this.router.url);
+
+    // Listen to route changes
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((event: any) => {
+        this.checkRoute(event.urlAfterRedirects);
+      });
+
     // Close dropdown when clicking outside
     if (typeof document !== 'undefined') {
       document.addEventListener('click', this.handleClickOutside.bind(this));
     }
+  }
+
+  private checkRoute(url: string): void {
+    this.isPatientPage = url.includes('/patient/');
   }
 
   ngOnDestroy(): void {
@@ -43,7 +64,6 @@ export class Header implements OnInit, OnDestroy {
       document.removeEventListener('click', this.handleClickOutside.bind(this));
     }
   }
-
   private handleClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
     const userMenu = target.closest('.user-menu');

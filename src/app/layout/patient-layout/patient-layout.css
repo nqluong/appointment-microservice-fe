@@ -1,0 +1,7 @@
+.content {
+  padding: 30px 0;
+}
+
+.doctor-content {
+  min-height: calc(100vh - 200px);
+}

@@ -6,6 +6,10 @@ import { takeUntil } from 'rxjs/operators';
 import { Doctor } from '../../../core/models/doctor.model';
 import { DoctorService } from '../../../core/services/doctor.service';
 
+declare var $: any;
+declare var AOS: any;
+declare var Swiper: any;
+
 @Component({
   selector: 'app-doctors-section',
   standalone: true,
@@ -31,6 +35,19 @@ export class DoctorsSection implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.destroyCarousel();
+  }
+
+  private destroyCarousel(): void {
+    if (typeof $ === 'undefined') return;
+    
+    try {
+      if ($('.our-doctors.owl-carousel').length > 0 && $('.our-doctors.owl-carousel').hasClass('owl-loaded')) {
+        $('.our-doctors.owl-carousel').trigger('destroy.owl.carousel').removeClass('owl-loaded');
+      }
+    } catch (e) {
+      console.error('Error destroying doctors carousel:', e);
+    }
   }
 
   private loadDoctors(): void {
@@ -44,16 +61,50 @@ export class DoctorsSection implements OnInit, OnDestroy {
           this.doctors = response.content;
           this.loading = false;
           this.cdr.detectChanges();
+          
+          // Re-initialize plugins after data is loaded
+          this.initializeCarousel();
         },
         error: (err) => {
           console.error('Error loading doctors:', err);
-          this.error = 'Không thể tải danh sách bác sĩ. Vui lòng thử lại sau.';
-          this.loading = false;
           
           // Fallback: Load mock data for testing UI
+          this.loading = false;
+          this.error = null;
+          
           this.cdr.detectChanges();
+          this.initializeCarousel();
         }
       });
+  }
+
+  private initializeCarousel(): void {
+    if (typeof $ === 'undefined') return;
+    
+    setTimeout(() => {
+      // Destroy existing carousel if any
+      if ($('.our-doctors.owl-carousel').hasClass('owl-loaded')) {
+        $('.our-doctors.owl-carousel').trigger('destroy.owl.carousel').removeClass('owl-loaded');
+      }
+
+      // Initialize carousel for doctors section
+      if ($('.our-doctors.owl-carousel').length > 0) {
+        $('.our-doctors.owl-carousel').owlCarousel({
+          loop: true,
+          margin: 24,
+          nav: true,
+          dots: false,
+          navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
+          navContainer: '.slide-nav-2',
+          responsive: {
+            0: { items: 1 },
+            768: { items: 2 },
+            992: { items: 3 },
+            1200: { items: 4 }
+          }
+        });
+      }
+    }, 300);
   }
 
   formatPrice(price: number): string {

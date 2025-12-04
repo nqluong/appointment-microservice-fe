@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Appointment, AppointmentPageResponse, AppointmentStatus } from '../models/appointment.model';
 
 export interface CreateAppointmentRequest {
   doctorId: string;
@@ -31,14 +32,18 @@ export interface AppointmentResponse {
 
 export interface AppointmentDetail {
   appointmentId: string;
+  publicCode: string;
   doctorId: string;
   doctorName: string;
   doctorPhone: string;
+  doctorEmail?: string;
+  doctorAvatar?: string;
   specialtyName: string;
   patientId: string;
   patientName: string;
   patientEmail: string;
   patientPhone: string;
+  slotId: string;
   appointmentDate: string;
   startTime: string;
   endTime: string;
@@ -75,5 +80,29 @@ export class AppointmentService {
     if (transactionId) params.transactionId = transactionId;
     
     return this.http.post(`${this.apiUrl}/payments/confirm-payment`, null, { params });
+  }
+
+  getUserAppointments(
+    userId: string,
+    statuses: AppointmentStatus[],
+    page: number = 0,
+    size: number = 20,
+    sortDirection: 'ASC' | 'DESC' = 'DESC',
+    sortBy: string = 'appointmentDate'
+  ): Observable<AppointmentPageResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sortDirection', sortDirection)
+      .set('sortBy', sortBy);
+
+    statuses.forEach(status => {
+      params = params.append('statuses', status);
+    });
+
+    return this.http.get<AppointmentPageResponse>(
+      `${this.apiUrl}/appointments/users/${userId}`,
+      { params }
+    );
   }
 }

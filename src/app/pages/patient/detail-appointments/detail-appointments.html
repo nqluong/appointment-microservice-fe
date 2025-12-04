@@ -1,0 +1,117 @@
+<div class="dashboard-header">
+    <div class="header-back">
+        <a routerLink="/patient/appointments" class="back-arrow"><i class="fa-solid fa-arrow-left"></i></a>
+        <h3>Chi tiết lịch đặt</h3>
+    </div>
+</div>
+
+@if (loading) {
+<div class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Đang tải...</span>
+    </div>
+</div>
+}
+
+@if (error) {
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+}
+
+@if (appointment && !loading) {
+<div class="appointment-details-wrap">
+    <!-- Appointment Detail Card -->
+    <div class="appointment-wrap appointment-detail-card">
+        <ul>
+            <li>
+                <div class="patinet-information">
+                    <a href="#">
+                        <img [src]="appointment.doctorAvatar || 'assets/img/doctors-dashboard/doctor-profile-img.jpg'"
+                            [alt]="appointment.doctorName">
+                    </a>
+                    <div class="patient-info">
+                        <p>#{{ appointment.publicCode }}</p>
+                        <h6><a href="#">{{ appointment.doctorName }}</a></h6>
+                        <div class="mail-info-patient">
+                            <ul>
+                                @if (appointment.doctorEmail) {
+                                <li>
+                                    <i class="isax isax-sms5"></i>
+                                    <a [href]="'mailto:' + appointment.doctorEmail">{{ appointment.doctorEmail }}</a>
+                                </li>
+                                }
+                                @if (appointment.doctorPhone) {
+                                <li>
+                                    <i class="isax isax-call5"></i> {{ appointment.doctorPhone }}
+                                </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="appointment-info">
+                <div class="person-info">
+                    <p>Chuyên khoa</p>
+                    <ul class="d-flex apponitment-types">
+                        <li>
+                            <i class="isax isax-hospital5 text-green"></i>
+                            {{ appointment.specialtyName }}
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="appointment-action">
+                <div class="detail-badge-info">
+                    @switch (appointment.status) {
+                    @case ('PENDING') {
+                    <span class="badge bg-warning">Chờ xác nhận</span>
+                    }
+                    @case ('CONFIRMED') {
+                    <span class="badge bg-success">Đã xác nhận</span>
+                    }
+                    @case ('COMPLETED') {
+                    <span class="badge bg-info">Đã hoàn thành</span>
+                    }
+                    @case ('CANCELLED') {
+                    <span class="badge bg-danger me-2">Đã hủy</span>
+                    }
+                    }
+                </div>
+                <div class="consult-fees">
+                    <h6>Phí khám: {{ formatPrice(appointment.consultationFee) }}</h6>
+                </div>
+            </li>
+        </ul>
+        <ul class="detail-card-bottom-info">
+            <li>
+                <h6>Ngày & Giờ hẹn</h6>
+                <span>{{ formatDate(appointment.appointmentDate) }} - {{ formatTime(appointment.startTime) }}</span>
+            </li>
+            <li>
+                <h6>Thời gian khám</h6>
+                <span>{{ formatTime(appointment.startTime) }} - {{ formatTime(appointment.endTime) }}</span>
+            </li>
+            @if (appointment.notes) {
+            <li>
+                <h6>Ghi chú</h6>
+                <span>{{ appointment.notes }}</span>
+            </li>
+            }
+            <li>
+                <h6>Trạng thái</h6>
+                <span>{{ getStatusText(appointment.status) }}</span>
+            </li>
+            @if (appointment.status === 'CONFIRMED') {
+            <li>
+                <div class="start-btn">
+                    <a href="#" class="btn btn-md btn-primary-gradient rounded-pill">Bắt đầu khám</a>
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+    <!-- /Appointment Detail Card -->
+</div>
+}
