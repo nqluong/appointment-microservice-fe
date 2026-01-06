@@ -87,4 +87,13 @@ export class Header implements OnInit, OnDestroy {
     if (!this.currentUser) return '';
     return this.currentUser.email?.split('@')[0] || 'User';
   }
+
+  isAdmin(): boolean {
+    return this.currentUser?.userRoles?.includes('ADMIN') || false;
+  }
+
+  goToAdminPanel(): void {
+    this.router.navigate(['/admin']);
+    this.showUserMenu = false;
+  }
 }

@@ -1,15 +1,23 @@
 <div class="profile-sidebar patient-sidebar profile-sidebar-new">
     <div class="widget-profile pro-widget-content">
         <div class="profile-info-widget">
-            <a routerLink="/patient/profile" class="booking-doc-img">
-                <img [src]="getPatientAvatar()" alt="User Image">
-            </a>
-            <div class="profile-det-info">
-                <h3><a routerLink="/patient/profile">{{ getPatientName() }}</a></h3>
-                <div class="patient-details">
-                    <h5 class="mb-0">Patient ID : {{ getPatientId() }}</h5>
+            @if (loading) {
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Đang tải...</span>
+                    </div>
                 </div>
-            </div>
+            } @else {
+                <a routerLink="/patient/profile" class="booking-doc-img">
+                    <img [src]="getPatientAvatar()" alt="User Image">
+                </a>
+                <div class="profile-det-info">
+                    <h3><a routerLink="/patient/profile">{{ getPatientName() }}</a></h3>
+                    <div class="patient-details">
+                        <h5 class="mb-0">Patient ID : {{ getPatientId() }}</h5>
+                    </div>
+                </div>
+            }
         </div>
     </div>
     <div class="dashboard-widget">

@@ -89,39 +89,42 @@
 
 				<div>
 					<!-- Authenticated User Menu -->
-				<li class="nav-item user-menu" *ngIf="isAuthenticated">
-					<a href="javascript:void(0);" class="nav-link user-link" (click)="toggleUserMenu($event)">
-						<span class="user-img">
-							<i class="isax isax-user-octagon"></i>
-						</span>
-						<span class="user-name">{{ getUserDisplayName() }}</span>
-						<i class="fas fa-chevron-down ms-1"></i>
-					</a>
-					<div class="user-dropdown">
-						<div class="dropdown-menu dropdown-menu-end" [class.show]="showUserMenu">
-							<div class="user-header">
-								<div class="user-text">
-									<h6>{{ getUserDisplayName() }}</h6>
-									<p class="text-muted mb-0">{{ currentUser?.email }}</p>
+					<li class="nav-item user-menu" *ngIf="isAuthenticated">
+						<a href="javascript:void(0);" class="nav-link user-link" (click)="toggleUserMenu($event)">
+							<span class="user-img">
+								<i class="isax isax-user-octagon"></i>
+							</span>
+							<span class="user-name">{{ getUserDisplayName() }}</span>
+							<i class="fas fa-chevron-down ms-1"></i>
+						</a>
+						<div class="user-dropdown">
+							<div class="dropdown-menu dropdown-menu-end" [class.show]="showUserMenu">
+								<div class="user-header">
+									<div class="user-text">
+										<h6>{{ getUserDisplayName() }}</h6>
+										<p class="text-muted mb-0">{{ currentUser?.email }}</p>
+									</div>
 								</div>
+								<a class="dropdown-item" [routerLink]="['/profile']" (click)="showUserMenu = false">
+									<i class="feather-user me-2"></i>Hồ sơ
+								</a>
+								<a class="dropdown-item" [routerLink]="['/patient/appointments']"
+									(click)="showUserMenu = false">
+									<i class="feather-calendar me-2"></i>Lịch hẹn
+								</a>
+								<a class="dropdown-item" [routerLink]="['/settings']" (click)="showUserMenu = false">
+									<i class="feather-settings me-2"></i>Cài đặt
+								</a> <a class="dropdown-item" *ngIf="isAdmin()" href="javascript:void(0);"
+									(click)="goToAdminPanel()">
+									<i class="feather-shield me-2"></i>Quản trị
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="javascript:void(0);" (click)="logout()">
+									<i class="feather-log-out me-2"></i>Đăng xuất
+								</a>
 							</div>
-							<a class="dropdown-item" [routerLink]="['/profile']" (click)="showUserMenu = false">
-								<i class="feather-user me-2"></i>Hồ sơ
-							</a>
-							<a class="dropdown-item" [routerLink]="['/patient/appointments']"
-								(click)="showUserMenu = false">
-								<i class="feather-calendar me-2"></i>Lịch hẹn
-							</a>
-							<a class="dropdown-item" [routerLink]="['/settings']" (click)="showUserMenu = false">
-								<i class="feather-settings me-2"></i>Cài đặt
-							</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="javascript:void(0);" (click)="logout()">
-								<i class="feather-log-out me-2"></i>Đăng xuất
-							</a>
 						</div>
-					</div>
-				</li>
+					</li>
 				</div>
 			</ul>
 		</nav>

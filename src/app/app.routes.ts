@@ -13,6 +13,7 @@ import { BookingSuccess } from './pages/booking-success/booking-success';
 import { InvoiceView } from './pages/invoice-view/invoice-view';
 import { PatientAppointments } from './pages/patient/patient-appointments/patient-appointments';
 import { DetailAppointments } from './pages/patient/detail-appointments/detail-appointments';
+import { SpecialtyDetail } from './pages/specialty-detail/specialty-detail';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,10 @@ export const routes: Routes = [
       {
         path: 'invoice/:id',
         component: InvoiceView
+      },
+      {
+        path: 'specialties/:id',
+        component: SpecialtyDetail
       }
     ]
   },
