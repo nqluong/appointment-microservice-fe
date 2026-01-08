@@ -14,6 +14,8 @@ import { InvoiceView } from './pages/invoice-view/invoice-view';
 import { PatientAppointments } from './pages/patient/patient-appointments/patient-appointments';
 import { DetailAppointments } from './pages/patient/detail-appointments/detail-appointments';
 import { SpecialtyDetail } from './pages/specialty-detail/specialty-detail';
+import { Doctor } from './pages/admin/doctor/doctor';
+import { Dashbroad } from './pages/admin/dashbroad/dashbroad';
 
 export const routes: Routes = [
   {
@@ -69,6 +71,17 @@ export const routes: Routes = [
     path: 'admin',
     component: AdminLayout,
     // canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: Dashbroad,
+        pathMatch: 'full'
+      },
+      {
+        path: 'doctor',
+        component: Doctor
+      }
+    ]
   },
   {
     path: 'patient',

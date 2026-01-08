@@ -13,13 +13,11 @@ export class SpecialtyService {
 
   getActiveSpecialties(): Observable<Specialty[]> {
     const url = `${this.apiUrl}/specialties/public/active`;
-    console.log('Calling API:', url);
     return this.http.get<Specialty[]>(url);
   }
 
   getSpecialtyById(specialtyId: string): Observable<Specialty> {
     const url = `${this.apiUrl}/specialties/public/${specialtyId}`;
-    console.log('Calling API:', url);
     return this.http.get<Specialty>(url);
   }
 }

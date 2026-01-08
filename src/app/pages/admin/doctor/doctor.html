@@ -1,0 +1,204 @@
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row">
+            <div class="col-sm-7">
+                <h3 class="page-title">Danh sách bác sĩ</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a [routerLink]="['/admin']">Tổng quan</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-5 text-end">
+                @if (selectedDoctors.size > 0) {
+                <button class="btn btn-primary" (click)="renderScheduleForSelected()">
+                    <i class="fe fe-calendar me-1"></i>
+                    Tạo lịch làm việc ({{ selectedDoctors.size }})
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Loading State -->
+                    @if(loading)
+                    {
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                    </div>
+                    }
+
+                    <!-- Error State -->
+                    @if(error)
+                    {
+                    <div class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </div>
+                    }
+
+                    <!-- Table -->
+
+                    @if(!loading && !error)
+                    {
+                    <div class="table-responsive">
+                        <table class="datatable table table-hover table-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">
+                                        <input type="checkbox" 
+                                               [checked]="isAllSelected()" 
+                                               (change)="toggleSelectAll($event)"
+                                               class="form-check-input">
+                                    </th>
+                                    <th>Tên bác sĩ</th>
+                                    <th>Chuyên khoa</th>
+                                    <th>Chức danh</th>
+                                    <th>Năm kinh nghiệm</th>
+                                    <th>Giá khám</th>
+                                    <th>Số điện thoại</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (doctor of doctors; track doctor.userId) {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" 
+                                               [checked]="isDoctorSelected(doctor.userId)"
+                                               (change)="toggleDoctorSelection(doctor.userId)"
+                                               class="form-check-input">
+                                    </td>
+                                    <td>
+                                        <h2 class="table-avatar">
+                                            <a href="javascript:void(0);" class="avatar avatar-sm me-2">
+                                                <img class="avatar-img rounded-circle" [src]="doctor.avatarUrl"
+                                                    [alt]="doctor.fullName"
+                                                    onerror="this.src='assets/img/doctors/doctor-thumb-01.jpg'">
+                                            </a>
+                                            <a href="javascript:void(0);">{{ doctor.fullName }}</a>
+                                        </h2>
+                                    </td>
+                                    <td>{{ doctor.specialtyName }}</td>
+                                    <td>{{ doctor.qualification }}</td>
+                                    <td>{{ doctor.yearsOfExperience }} năm</td>
+                                    <td>{{ formatCurrency(doctor.consultationFee) }}</td>
+                                    <td>{{ doctor.phone }}</td>
+                                </tr>
+                                } @empty {
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        Không có dữ liệu bác sĩ
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    }
+
+                    @if(!loading && !error && totalPages > 1)
+                    {
+                    <div class="row mt-3">
+                        <div class="col-sm-12 col-md-5">
+                            <div class="dataTables_info">
+                                Hiển thị {{ currentPage * pageSize + 1 }} đến
+                                {{ Math.min((currentPage + 1) * pageSize, totalElements) }}
+                                trong tổng số {{ totalElements }} bác sĩ
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-7">
+                            <div class="dataTables_paginate paging_simple_numbers">
+                                <ul class="pagination justify-content-end">
+                                    <li class="paginate_button page-item previous" [class.disabled]="currentPage === 0">
+                                        <a href="javascript:void(0);" class="page-link"
+                                            (click)="onPageChange(currentPage - 1)">Trước</a>
+                                    </li>
+                                    @for (page of getPageNumbers(); track page) {
+                                    <li class="paginate_button page-item" [class.active]="page === currentPage">
+                                        <a href="javascript:void(0);" class="page-link" (click)="onPageChange(page)">{{ page + 1 }}</a>
+                                    </li>
+                                    }
+                                    <li class="paginate_button page-item next"
+                                        [class.disabled]="currentPage === totalPages - 1">
+                                        <a href="javascript:void(0);" class="page-link"
+                                            (click)="onPageChange(currentPage + 1)">Sau</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Schedule Render Modal -->
+@if (showScheduleModal) {
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chọn khoảng thời gian render lịch</h5>
+                <button type="button" class="btn-close" (click)="closeScheduleModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <p class="text-muted mb-3">
+                        <i class="fe fe-users me-2"></i>
+                        Đã chọn <strong>{{ selectedDoctors.size }}</strong> bác sĩ
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label for="startDate" class="form-label">Ngày bắt đầu</label>
+                    <input type="date" 
+                           class="form-control" 
+                           id="startDate" 
+                           [(ngModel)]="scheduleStartDate"
+                           [disabled]="isGeneratingSlots"
+                           required>
+                </div>
+                <div class="mb-3">
+                    <label for="endDate" class="form-label">Ngày kết thúc</label>
+                    <input type="date" 
+                           class="form-control" 
+                           id="endDate" 
+                           [(ngModel)]="scheduleEndDate"
+                           [min]="scheduleStartDate"
+                           [disabled]="isGeneratingSlots"
+                           required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" 
+                        class="btn btn-secondary" 
+                        (click)="closeScheduleModal()"
+                        [disabled]="isGeneratingSlots">
+                    Hủy
+                </button>
+                <button type="button" 
+                        class="btn btn-primary" 
+                        (click)="confirmScheduleRender()"
+                        [disabled]="isGeneratingSlots">
+                    @if (isGeneratingSlots) {
+                    <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                    Đang tạo lịch...
+                    } @else {
+                    <i class="fe fe-check me-1"></i>
+                    Xác nhận
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+}

@@ -1,12 +1,12 @@
 import { Component, DOCUMENT, Inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { AdminHeader } from '../components/admin-header/admin-header';
 import { AdminSidebar } from '../components/admin-sidebar/admin-sidebar';
-import { Dashbroad } from "../../pages/admin/dashbroad/dashbroad";
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [AdminHeader, AdminSidebar, Dashbroad],
+  imports: [AdminHeader, AdminSidebar, RouterOutlet],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.css',
   host: {

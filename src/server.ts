@@ -36,7 +36,8 @@ app.use(
 );
 
 /**
- * Handle all other requests by rendering the Angular application.
+ * Handle all requests by rendering the Angular application.
+ * Admin routes will be rendered in CSR mode based on app.routes.server.ts configuration.
  */
 app.use((req, res, next) => {
   angularApp

@@ -24,8 +24,6 @@ export class ClinicSpecialties implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('ClinicSpecialties ngOnInit called');
-    console.log('Initial loading state:', this.loading);
     this.loadSpecialties();
   }
 
@@ -37,21 +35,14 @@ export class ClinicSpecialties implements OnInit, AfterViewInit {
   }
 
   private loadSpecialties(): void {
-    console.log('Bắt đầu tải specialties...');
     this.loading = true;
     
     this.specialtyService.getActiveSpecialties().subscribe({
       next: (data) => {
-        console.log('Đã tải specialties:', data);
-        console.log('Data type:', typeof data);
-        console.log('Is array:', Array.isArray(data));
+
         
         this.specialties = data;
         this.loading = false;
-        
-        console.log('Loading state after:', this.loading);
-        console.log('Specialties count:', this.specialties.length);
-        console.log('Specialties:', this.specialties);
         
         this.cdr.detectChanges();
         

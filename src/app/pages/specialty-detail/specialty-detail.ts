@@ -25,30 +25,23 @@ export class SpecialtyDetail implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('SpecialtyDetail ngOnInit called');
     const specialtyId = this.route.snapshot.paramMap.get('id');
-    console.log('Specialty ID from route:', specialtyId);
     if (specialtyId) {
       this.loadSpecialtyDetail(specialtyId);
     } else {
-      console.error('No specialty ID found in route');
       this.error = 'Không tìm thấy ID chuyên khoa';
       this.loading = false;
     }
   }
 
   private loadSpecialtyDetail(specialtyId: string): void {
-    console.log('Loading specialty detail for ID:', specialtyId);
     this.loading = true;
     
     this.specialtyService.getSpecialtyById(specialtyId).subscribe({
       next: (data) => {
-        console.log('Specialty data received:', data);
         this.specialty = data;
         this.doctors = data.doctors || [];
         this.loading = false;
-        console.log('Loading state:', this.loading);
-        console.log('Doctors count:', this.doctors.length);
         this.cdr.detectChanges();
       },
       error: (err) => {
